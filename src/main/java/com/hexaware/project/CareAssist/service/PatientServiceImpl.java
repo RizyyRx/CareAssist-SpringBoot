@@ -64,6 +64,26 @@ public class PatientServiceImpl implements PatientService{
 
 	    return "Patient profile updated successfully for user: " + user.getUsername();
 	}
+	
+	public PatientUpdateDTO getPatientProfile(User user) {
+		Patient patient = patientRepository.findByUser(user)
+	            .orElse(null);
+		
+		if (patient == null) {
+	        throw new RuntimeException("No patient profile found for user: " + user.getUsername());
+	    }
+		
+	    PatientUpdateDTO dto = new PatientUpdateDTO();
+	    dto.setFirstName(patient.getFirstName());
+	    dto.setLastName(patient.getLastName());
+	    dto.setDob(patient.getDob());
+	    dto.setGender(patient.getGender());
+	    dto.setContactNumber(patient.getContactNumber());
+	    dto.setAddress(patient.getAddress());
+	    dto.setMedicalHistory(patient.getMedicalHistory());
+
+	    return dto;
+	}
 
 
 	public String selectInsurancePlan(User user, PatientInsuranceDTO patientInsuranceDTO) {

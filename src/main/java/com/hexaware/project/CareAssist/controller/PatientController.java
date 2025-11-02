@@ -1,6 +1,5 @@
 package com.hexaware.project.CareAssist.controller;
 
-import java.security.Principal;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -20,7 +19,6 @@ import com.hexaware.project.CareAssist.dto.ClaimSubmissionDTO;
 import com.hexaware.project.CareAssist.dto.InvoiceViewDTO;
 import com.hexaware.project.CareAssist.dto.PatientInsuranceDTO;
 import com.hexaware.project.CareAssist.dto.PatientUpdateDTO;
-import com.hexaware.project.CareAssist.entity.Invoice;
 import com.hexaware.project.CareAssist.entity.User;
 import com.hexaware.project.CareAssist.repository.UserRepository;
 import com.hexaware.project.CareAssist.service.PatientService;
@@ -40,6 +38,19 @@ public class PatientController {
 	private UserRepository userRepository;
 	private PatientService patientService;
 
+	// get patient profile
+	@PreAuthorize("hasRole('PATIENT')")
+	@GetMapping("/profile")
+	public ResponseEntity<PatientUpdateDTO> getPatientProfile(Authentication authentication) {
+
+	    String username = authentication.getName(); // Extract username from JWT
+	    User user = userRepository.findByUsername(username)
+	                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+	    PatientUpdateDTO patientProfile = patientService.getPatientProfile(user);
+
+	    return ResponseEntity.ok(patientProfile);
+	}
 	
 	// Update patient profile
 	@PreAuthorize("hasRole('PATIENT')")

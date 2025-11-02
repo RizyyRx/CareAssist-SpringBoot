@@ -10,6 +10,8 @@ import com.hexaware.project.CareAssist.entity.User;
 
 public interface PatientService {
 
+	PatientUpdateDTO getPatientProfile(User user);
+	
 	String updatePatientProfile(User user, PatientUpdateDTO patientUpdateDTO);
 	
 	String selectInsurancePlan(User user, PatientInsuranceDTO patientInsuranceDTO);

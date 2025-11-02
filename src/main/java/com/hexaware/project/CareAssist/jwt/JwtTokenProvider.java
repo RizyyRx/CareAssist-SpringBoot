@@ -22,6 +22,8 @@ public class JwtTokenProvider {
     public String generateToken(Authentication authentication){
  
         String username = authentication.getName();
+        
+        String role = authentication.getAuthorities().iterator().next().getAuthority();
  
         Date currentDate = new Date();
  
@@ -29,6 +31,7 @@ public class JwtTokenProvider {
  
         String token = Jwts.builder()
         	    .setSubject(username)
+        	    .claim("role", role)
         	    .setIssuedAt(new Date())
         	    .setExpiration(expireDate)
         	    .signWith(key())
