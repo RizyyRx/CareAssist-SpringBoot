@@ -52,6 +52,7 @@ public class SpringSecurityConfig {
                     authorize.requestMatchers("/api/patient/update-profile").hasRole("PATIENT");
                     authorize.requestMatchers("/api/patient/profile").hasRole("PATIENT");
                     authorize.requestMatchers("/api/patient/select-plan").hasRole("PATIENT");
+                    authorize.requestMatchers("/api/patient/selected-plans").hasRole("PATIENT");
                     authorize.requestMatchers("/api/patient/invoice/mark-paid/**").hasRole("PATIENT");
                     authorize.requestMatchers("/api/patient/invoices").hasRole("PATIENT");
                     authorize.requestMatchers("/api/patient/submit-claim").hasRole("PATIENT");

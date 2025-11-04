@@ -13,6 +13,7 @@ import com.hexaware.project.CareAssist.dto.ClaimSubmissionDTO;
 import com.hexaware.project.CareAssist.dto.InvoiceViewDTO;
 import com.hexaware.project.CareAssist.dto.PatientInsuranceDTO;
 import com.hexaware.project.CareAssist.dto.PatientUpdateDTO;
+import com.hexaware.project.CareAssist.dto.SelectedPlanDTO;
 import com.hexaware.project.CareAssist.entity.Claim;
 import com.hexaware.project.CareAssist.entity.InsurancePlan;
 import com.hexaware.project.CareAssist.entity.Invoice;
@@ -110,6 +111,24 @@ public class PatientServiceImpl implements PatientService{
 		
 		return "Insurance plan selected successfully";
 		
+	}
+	
+	public List<SelectedPlanDTO> getSelectedPlans(User user) {
+		Patient patient = patientRepository.findByUser(user)
+                .orElseThrow(() -> new RuntimeException("No patient found for user"));
+
+        List<PatientInsurance> insurances = patientInsuranceRepository.findByPatientPatientId(patient.getPatientId());
+
+        return insurances.stream().map(pi -> new SelectedPlanDTO(
+                pi.getInsurancePlan().getPlanId(),
+                pi.getInsurancePlan().getPlanName(),
+                pi.getInsurancePlan().getCoverageAmount(),
+                pi.getInsurancePlan().getPremiumAmount(),
+                pi.getInsurancePlan().getPolicyTerm(),
+                pi.getInsurancePlan().getDescription(),
+                pi.getStartDate()
+        )).collect(Collectors.toList());
+
 	}
 	
 	public List<InvoiceViewDTO> getInvoices(User user) {

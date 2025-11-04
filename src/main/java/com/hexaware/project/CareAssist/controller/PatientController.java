@@ -19,6 +19,7 @@ import com.hexaware.project.CareAssist.dto.ClaimSubmissionDTO;
 import com.hexaware.project.CareAssist.dto.InvoiceViewDTO;
 import com.hexaware.project.CareAssist.dto.PatientInsuranceDTO;
 import com.hexaware.project.CareAssist.dto.PatientUpdateDTO;
+import com.hexaware.project.CareAssist.dto.SelectedPlanDTO;
 import com.hexaware.project.CareAssist.entity.User;
 import com.hexaware.project.CareAssist.repository.UserRepository;
 import com.hexaware.project.CareAssist.service.PatientService;
@@ -76,6 +77,16 @@ public class PatientController {
 
 	    String message = patientService.selectInsurancePlan(user, dto);
 	    return new ResponseEntity<>(message, HttpStatus.CREATED);
+	}
+	
+	@PreAuthorize("hasRole('PATIENT')")
+	@GetMapping("/selected-plans")
+	public ResponseEntity<List<SelectedPlanDTO>> getSelectedPlans(Authentication authentication) {
+	    String username = authentication.getName();
+	    User user = userRepository.findByUsername(username)
+	                 .orElseThrow(() -> new RuntimeException("User not found"));
+	    List<SelectedPlanDTO> plans = patientService.getSelectedPlans(user);
+	    return ResponseEntity.ok(plans);
 	}
 	
 	// Get current patient invoices
