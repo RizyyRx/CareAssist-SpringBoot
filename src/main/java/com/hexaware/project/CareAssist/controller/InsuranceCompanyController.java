@@ -51,6 +51,7 @@ public class InsuranceCompanyController {
     }
     
     // Get all insurance plans
+    @PreAuthorize("hasAnyRole('INSURANCE_COMPANY','PATIENT')")
     @GetMapping("/get-all")
     public ResponseEntity<List<InsurancePlanDTO>> getAllInsurancePlans() {
         List<InsurancePlanDTO> plans = insuranceCompanyService.getAllInsurancePlans();

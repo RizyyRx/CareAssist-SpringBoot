@@ -18,7 +18,7 @@ import com.hexaware.project.CareAssist.dto.GetAllUserDTO;
 import com.hexaware.project.CareAssist.service.AdminService;
 
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping("/api")
 public class AdminController {
 
 
@@ -53,7 +53,7 @@ public class AdminController {
     }
     
     // Get all patients
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'HEALTHCARE_PROVIDER', 'INSURANCE_COMPANY')")
     @GetMapping("/get-patients")
     public ResponseEntity<List<GetAllPatientDTO>> getAllPatients() {
         return ResponseEntity.ok(adminService.getAllPatients());
@@ -81,7 +81,7 @@ public class AdminController {
     }
 
     // Get invoice by patient Id
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','HEALTHCARE_PROVIDER')")
     @GetMapping("/get-invoice/{patientId}")
     public ResponseEntity<List<GetAllInvoiceDTO>> getInvoicesByPatientId(@PathVariable int patientId) {
         return ResponseEntity.ok(adminService.getInvoicesByPatientId(patientId));

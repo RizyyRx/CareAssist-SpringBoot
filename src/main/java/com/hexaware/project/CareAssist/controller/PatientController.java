@@ -90,6 +90,7 @@ public class PatientController {
 	}
 	
 	// Get current patient invoices
+	@PreAuthorize("hasRole('PATIENT')")
 	@GetMapping("/invoices")
     public ResponseEntity<List<InvoiceViewDTO>> getPatientInvoices(Authentication authentication) {
         String username = authentication.getName();
