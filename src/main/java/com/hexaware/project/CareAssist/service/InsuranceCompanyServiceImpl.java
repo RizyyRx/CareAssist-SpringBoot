@@ -53,6 +53,7 @@ public class InsuranceCompanyServiceImpl implements InsuranceCompanyService{
 	        List<InsurancePlan> plans = insurancePlanRepository.findAll();
 	        return plans.stream().map(plan -> {
 	            InsurancePlanDTO dto = new InsurancePlanDTO();
+	            dto.setPlanId(plan.getPlanId());
 	            dto.setPlanName(plan.getPlanName());
 	            dto.setCoverageAmount(plan.getCoverageAmount());
 	            dto.setPremiumAmount(plan.getPremiumAmount());

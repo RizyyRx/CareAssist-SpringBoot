@@ -7,6 +7,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 public class InsurancePlanDTO {
+	
+	@NotBlank(message = "Plan id is required")
+	private int planId;
 
     @NotBlank(message = "Plan name is required")
     private String planName;
@@ -24,6 +27,14 @@ public class InsurancePlanDTO {
     private Integer policyTerm;
 
     private String description; // Optional
+    
+	public int getPlanId() {
+		return planId;
+	}
+
+	public void setPlanId(int planId) {
+		this.planId = planId;
+	}
 
 	public String getPlanName() {
 		return planName;
@@ -64,7 +75,5 @@ public class InsurancePlanDTO {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-
 
 }
