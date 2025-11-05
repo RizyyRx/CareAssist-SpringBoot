@@ -3,11 +3,11 @@ package com.hexaware.project.CareAssist.service;
 import java.util.List;
 
 import com.hexaware.project.CareAssist.dto.GetAllClaimHistoryDTO;
-import com.hexaware.project.CareAssist.dto.GetAllInvoiceDTO;
 import com.hexaware.project.CareAssist.dto.GetAllPatientDTO;
 import com.hexaware.project.CareAssist.dto.GetAllPatientInsuranceDTO;
 import com.hexaware.project.CareAssist.dto.GetAllPaymentDTO;
 import com.hexaware.project.CareAssist.dto.GetAllUserDTO;
+import com.hexaware.project.CareAssist.dto.InvoiceViewDTO;
 
 public interface AdminService {
 
@@ -21,9 +21,9 @@ public interface AdminService {
 
     List<GetAllPatientInsuranceDTO> getAllPatientInsurances();
 
-    List<GetAllInvoiceDTO> getAllInvoices();
+    List<InvoiceViewDTO> getAllInvoices();
 
     List<GetAllPatientInsuranceDTO> getPatientInsurancesByPatientId(int patientId);
 
-    List<GetAllInvoiceDTO> getInvoicesByPatientId(int patientId);
+    List<InvoiceViewDTO> getInvoicesByPatientId(int patientId);
 }

@@ -11,9 +11,6 @@ public class InvoiceDTO {
 	@NotNull(message = "Patient ID is required")
     private Integer patientId;
 
-    @NotBlank(message = "Invoice number is required")
-    private String invoiceNumber;
-
     private BigDecimal consultationFee;
     private BigDecimal diagnosticTestsFee;
     private BigDecimal diagnosticScanFee;
@@ -25,14 +22,6 @@ public class InvoiceDTO {
 
 	public void setPatientId(Integer patientId) {
 		this.patientId = patientId;
-	}
-
-	public String getInvoiceNumber() {
-		return invoiceNumber;
-	}
-
-	public void setInvoiceNumber(String invoiceNumber) {
-		this.invoiceNumber = invoiceNumber;
 	}
 
 	public BigDecimal getConsultationFee() {

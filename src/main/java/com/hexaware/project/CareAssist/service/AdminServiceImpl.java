@@ -6,11 +6,11 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.hexaware.project.CareAssist.dto.GetAllClaimHistoryDTO;
-import com.hexaware.project.CareAssist.dto.GetAllInvoiceDTO;
 import com.hexaware.project.CareAssist.dto.GetAllPatientDTO;
 import com.hexaware.project.CareAssist.dto.GetAllPatientInsuranceDTO;
 import com.hexaware.project.CareAssist.dto.GetAllPaymentDTO;
 import com.hexaware.project.CareAssist.dto.GetAllUserDTO;
+import com.hexaware.project.CareAssist.dto.InvoiceViewDTO;
 import com.hexaware.project.CareAssist.entity.Claim;
 import com.hexaware.project.CareAssist.entity.Payment;
 import com.hexaware.project.CareAssist.entity.User;
@@ -124,24 +124,23 @@ public class AdminServiceImpl implements AdminService{
     }
 
     
-    public List<GetAllInvoiceDTO> getAllInvoices() {
+    public List<InvoiceViewDTO> getAllInvoices() {
         return invoiceRepository.findAll()
             .stream()
-            .map(inv -> new GetAllInvoiceDTO(
-                inv.getInvoiceId(),
-                inv.getPatient().getPatientId(),
-                inv.getProvider().getUserId(),
-                inv.getInvoiceNumber(),
-                inv.getInvoiceDate(),
-                inv.getDueDate(),
-                inv.getConsultationFee(),
-                inv.getDiagnosticTestsFee(),
-                inv.getDiagnosticScanFee(),
-                inv.getMedicationFee(),
-                inv.getSubtotal(),
-                inv.getTax(),
-                inv.getTotalAmount(),
-                inv.getStatus()
+            .map(inv -> new InvoiceViewDTO(
+            		inv.getInvoiceId(),
+                    inv.getConsultationFee(),                 
+                    inv.getDiagnosticScanFee(),               
+                    inv.getDiagnosticTestsFee(),              
+                    inv.getMedicationFee(),                   
+                    inv.getDueDate(),                         
+                    inv.getInvoiceDate(),                     
+                    inv.getStatus(),                          
+                    inv.getSubtotal(),                        
+                    inv.getTax(),                             
+                    inv.getTotalAmount(),                     
+                    inv.getPatient().getUser().getUsername(), 
+                    inv.getProvider().getUsername()   
             )).toList();
     }
 
@@ -160,24 +159,24 @@ public class AdminServiceImpl implements AdminService{
     }
 
     
-    public List<GetAllInvoiceDTO> getInvoicesByPatientId(int patientId) {
+    public List<InvoiceViewDTO> getInvoicesByPatientId(int patientId) {
         return invoiceRepository.findByPatientPatientId(patientId)
             .stream()
-            .map(inv -> new GetAllInvoiceDTO(
-                inv.getInvoiceId(),
-                inv.getPatient().getPatientId(),
-                inv.getProvider().getUserId(),
-                inv.getInvoiceNumber(),
-                inv.getInvoiceDate(),
-                inv.getDueDate(),
-                inv.getConsultationFee(),
-                inv.getDiagnosticTestsFee(),
-                inv.getDiagnosticScanFee(),
-                inv.getMedicationFee(),
-                inv.getSubtotal(),
-                inv.getTax(),
-                inv.getTotalAmount(),
-                inv.getStatus()
+            .map(inv -> new InvoiceViewDTO(
+            		inv.getInvoiceId(),
+                    inv.getConsultationFee(),                 
+                    inv.getDiagnosticScanFee(),               
+                    inv.getDiagnosticTestsFee(),              
+                    inv.getMedicationFee(),                   
+                    inv.getDueDate(),                         
+                    inv.getInvoiceDate(),                     
+                    inv.getStatus(),                          
+                    inv.getSubtotal(),                        
+                    inv.getTax(),                             
+                    inv.getTotalAmount(),                     
+                    inv.getPatient().getUser().getUsername(), 
+                    inv.getProvider().getUsername()           
+
             )).toList();
     }
 	

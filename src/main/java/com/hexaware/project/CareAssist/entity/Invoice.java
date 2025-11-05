@@ -29,10 +29,6 @@ public class Invoice {
     @NotNull(message = "Provider is required")
     private User provider;
 
-    @NotBlank(message = "Invoice number is required")
-    @Column(nullable = false, unique = true, length = 50)
-    private String invoiceNumber;
-
     @NotNull(message = "Invoice date is required")
     @Column(nullable = false, updatable = false)
     private LocalDate invoiceDate;
@@ -115,14 +111,6 @@ public class Invoice {
 
 	public void setProvider(User provider) {
 		this.provider = provider;
-	}
-
-	public String getInvoiceNumber() {
-		return invoiceNumber;
-	}
-
-	public void setInvoiceNumber(String invoiceNumber) {
-		this.invoiceNumber = invoiceNumber;
 	}
 
 	public LocalDate getInvoiceDate() {
@@ -211,7 +199,6 @@ public class Invoice {
 
 	public Invoice(int invoiceId, @NotNull(message = "Patient is required") Patient patient,
 			@NotNull(message = "Provider is required") User provider,
-			@NotBlank(message = "Invoice number is required") String invoiceNumber,
 			@NotNull(message = "Invoice date is required") LocalDate invoiceDate,
 			@NotNull(message = "Due date is required") LocalDate dueDate,
 			@Positive(message = "Consultation fee must be positive") BigDecimal consultationFee,
@@ -223,7 +210,6 @@ public class Invoice {
 		this.invoiceId = invoiceId;
 		this.patient = patient;
 		this.provider = provider;
-		this.invoiceNumber = invoiceNumber;
 		this.invoiceDate = invoiceDate;
 		this.dueDate = dueDate;
 		this.consultationFee = consultationFee;
@@ -239,7 +225,7 @@ public class Invoice {
 	@Override
 	public String toString() {
 		return "Invoice [invoiceId=" + invoiceId + ", patient=" + patient + ", provider=" + provider
-				+ ", invoiceNumber=" + invoiceNumber + ", invoiceDate=" + invoiceDate + ", dueDate=" + dueDate
+				+ ", invoiceDate=" + invoiceDate + ", dueDate=" + dueDate
 				+ ", consultationFee=" + consultationFee + ", diagnosticTestsFee=" + diagnosticTestsFee
 				+ ", diagnosticScanFee=" + diagnosticScanFee + ", medicationFee=" + medicationFee + ", subtotal="
 				+ subtotal + ", tax=" + tax + ", totalAmount=" + totalAmount + ", status=" + status + "]";

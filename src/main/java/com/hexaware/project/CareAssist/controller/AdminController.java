@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hexaware.project.CareAssist.dto.GetAllClaimHistoryDTO;
-import com.hexaware.project.CareAssist.dto.GetAllInvoiceDTO;
 import com.hexaware.project.CareAssist.dto.GetAllPatientDTO;
 import com.hexaware.project.CareAssist.dto.GetAllPatientInsuranceDTO;
 import com.hexaware.project.CareAssist.dto.GetAllPaymentDTO;
 import com.hexaware.project.CareAssist.dto.GetAllUserDTO;
+import com.hexaware.project.CareAssist.dto.InvoiceViewDTO;
 import com.hexaware.project.CareAssist.service.AdminService;
 
 @RestController
@@ -69,7 +69,7 @@ public class AdminController {
     //Get all invoices
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/get-invoices")
-    public ResponseEntity<List<GetAllInvoiceDTO>> getAllInvoices() {
+    public ResponseEntity<List<InvoiceViewDTO>> getAllInvoices() {
         return ResponseEntity.ok(adminService.getAllInvoices());
     }
 
@@ -83,7 +83,7 @@ public class AdminController {
     // Get invoice by patient Id
     @PreAuthorize("hasAnyRole('ADMIN','HEALTHCARE_PROVIDER')")
     @GetMapping("/get-invoice/{patientId}")
-    public ResponseEntity<List<GetAllInvoiceDTO>> getInvoicesByPatientId(@PathVariable int patientId) {
+    public ResponseEntity<List<InvoiceViewDTO>> getInvoicesByPatientId(@PathVariable int patientId) {
         return ResponseEntity.ok(adminService.getInvoicesByPatientId(patientId));
     }
 }

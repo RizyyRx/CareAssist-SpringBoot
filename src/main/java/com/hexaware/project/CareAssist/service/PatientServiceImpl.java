@@ -95,6 +95,11 @@ public class PatientServiceImpl implements PatientService{
 	        throw new RuntimeException("No patient found for user");
 	    }
 		
+		Optional<PatientInsurance> existingPlan = patientInsuranceRepository.findByPatient(patient);
+	    if (existingPlan.isPresent()) {
+	        throw new RuntimeException("Patient already has an active insurance plan");
+	    }
+		
 		InsurancePlan insurancePlan = insurancePlanRepository.findById(patientInsuranceDTO.getPlanId())
 				.orElseThrow(() -> new RuntimeException("Insurance Plan not found"));
 		
@@ -148,13 +153,12 @@ public class PatientServiceImpl implements PatientService{
 	            dto.setMedicationFee(inv.getMedicationFee());
 	            dto.setDueDate(inv.getDueDate());
 	            dto.setInvoiceDate(inv.getInvoiceDate());
-	            dto.setInvoiceNumber(inv.getInvoiceNumber());
 	            dto.setStatus(inv.getStatus());
 	            dto.setSubtotal(inv.getSubtotal());
 	            dto.setTax(inv.getTax());
 	            dto.setTotalAmount(inv.getTotalAmount());
-	            dto.setPatientId(inv.getPatient().getPatientId());
-	            dto.setProviderId(inv.getProvider().getUserId());
+	            dto.setPatientName(inv.getPatient().getUser().getUsername());
+	            dto.setProviderName(inv.getProvider().getUsername());
 	            return dto;
 	        })
 	        .collect(Collectors.toList());

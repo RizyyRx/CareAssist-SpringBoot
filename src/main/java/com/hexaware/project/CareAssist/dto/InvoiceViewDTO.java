@@ -12,13 +12,13 @@ public class InvoiceViewDTO {
     private BigDecimal medicationFee;
     private LocalDate dueDate;
     private LocalDate invoiceDate;
-    private String invoiceNumber;
     private String status;
     private BigDecimal subtotal;
     private BigDecimal tax;
     private BigDecimal totalAmount;
-    private int patientId;
-    private int providerId;
+    private String patientName;
+    private String providerName;
+	
 
 	public int getInvoiceId() {
 		return invoiceId;
@@ -62,12 +62,6 @@ public class InvoiceViewDTO {
 	public void setInvoiceDate(LocalDate invoiceDate) {
 		this.invoiceDate = invoiceDate;
 	}
-	public String getInvoiceNumber() {
-		return invoiceNumber;
-	}
-	public void setInvoiceNumber(String invoiceNumber) {
-		this.invoiceNumber = invoiceNumber;
-	}
 	public String getStatus() {
 		return status;
 	}
@@ -92,17 +86,42 @@ public class InvoiceViewDTO {
 	public void setTotalAmount(BigDecimal totalAmount) {
 		this.totalAmount = totalAmount;
 	}
-	public int getPatientId() {
-		return patientId;
+	public String getPatientName() {
+		return patientName;
 	}
-	public void setPatientId(int patientId) {
-		this.patientId = patientId;
+	public void setPatientName(String patientName) {
+		this.patientName = patientName;
 	}
-	public int getProviderId() {
-		return providerId;
+	public String getProviderName() {
+		return providerName;
 	}
-	public void setProviderId(int providerId) {
-		this.providerId = providerId;
+	public void setProviderName(String providerName) {
+		this.providerName = providerName;
 	}
 	
+	public InvoiceViewDTO() {
+		super();
+	}
+
+	public InvoiceViewDTO(int invoiceId, BigDecimal consultationFee, BigDecimal diagnosticScanFee,
+			BigDecimal diagnosticTestsFee, BigDecimal medicationFee, LocalDate dueDate, LocalDate invoiceDate,
+			String status, BigDecimal subtotal, BigDecimal tax, BigDecimal totalAmount, String patientName,
+			String providerName) {
+		super();
+		this.invoiceId = invoiceId;
+		this.consultationFee = consultationFee;
+		this.diagnosticScanFee = diagnosticScanFee;
+		this.diagnosticTestsFee = diagnosticTestsFee;
+		this.medicationFee = medicationFee;
+		this.dueDate = dueDate;
+		this.invoiceDate = invoiceDate;
+		this.status = status;
+		this.subtotal = subtotal;
+		this.tax = tax;
+		this.totalAmount = totalAmount;
+		this.patientName = patientName;
+		this.providerName = providerName;
+	}
+
+
 }

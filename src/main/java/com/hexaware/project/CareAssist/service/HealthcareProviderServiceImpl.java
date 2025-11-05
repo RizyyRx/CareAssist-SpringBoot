@@ -30,7 +30,6 @@ public class HealthcareProviderServiceImpl implements HealthcareProviderService{
 	    Invoice invoice = new Invoice();
 	    invoice.setProvider(provider);
 	    invoice.setPatient(patient);
-	    invoice.setInvoiceNumber(dto.getInvoiceNumber());
 	    invoice.setInvoiceDate(LocalDate.now());
 	    invoice.setConsultationFee(dto.getConsultationFee());
 	    invoice.setDiagnosticTestsFee(dto.getDiagnosticTestsFee());
