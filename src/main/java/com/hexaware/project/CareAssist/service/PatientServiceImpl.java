@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.hexaware.project.CareAssist.dto.ClaimSubmissionDTO;
+import com.hexaware.project.CareAssist.dto.GetAllClaimHistoryDTO;
+import com.hexaware.project.CareAssist.dto.GetAllPaymentDTO;
 import com.hexaware.project.CareAssist.dto.InvoiceViewDTO;
 import com.hexaware.project.CareAssist.dto.PatientInsuranceDTO;
 import com.hexaware.project.CareAssist.dto.PatientUpdateDTO;
@@ -19,25 +21,28 @@ import com.hexaware.project.CareAssist.entity.InsurancePlan;
 import com.hexaware.project.CareAssist.entity.Invoice;
 import com.hexaware.project.CareAssist.entity.Patient;
 import com.hexaware.project.CareAssist.entity.PatientInsurance;
+import com.hexaware.project.CareAssist.entity.Payment;
 import com.hexaware.project.CareAssist.entity.User;
 import com.hexaware.project.CareAssist.repository.ClaimRepository;
 import com.hexaware.project.CareAssist.repository.InsurancePlanRepository;
 import com.hexaware.project.CareAssist.repository.InvoiceRepository;
 import com.hexaware.project.CareAssist.repository.PatientInsuranceRepository;
 import com.hexaware.project.CareAssist.repository.PatientRepository;
+import com.hexaware.project.CareAssist.repository.PaymentRepository;
 
 @Service
 public class PatientServiceImpl implements PatientService{
 	
 
 	public PatientServiceImpl(PatientRepository patientRepository, InsurancePlanRepository insurancePlanRepository,
-			PatientInsuranceRepository patientInsuranceRepository, InvoiceRepository invoiceRepository, ClaimRepository claimRepository) {
+			PatientInsuranceRepository patientInsuranceRepository, InvoiceRepository invoiceRepository, ClaimRepository claimRepository, PaymentRepository paymentRepository) {
 		super();
 		this.patientRepository = patientRepository;
 		this.insurancePlanRepository = insurancePlanRepository;
 		this.patientInsuranceRepository = patientInsuranceRepository;
 		this.invoiceRepository = invoiceRepository;
 		this.claimRepository = claimRepository;
+		this.paymentRepository = paymentRepository;
 	}
 
 	private PatientRepository patientRepository;
@@ -45,6 +50,7 @@ public class PatientServiceImpl implements PatientService{
 	private PatientInsuranceRepository patientInsuranceRepository;
 	private InvoiceRepository invoiceRepository;
 	private ClaimRepository claimRepository;
+	private PaymentRepository paymentRepository;
 
 
 	public String updatePatientProfile(User user, PatientUpdateDTO dto) {
@@ -71,7 +77,7 @@ public class PatientServiceImpl implements PatientService{
 	            .orElse(null);
 		
 		if (patient == null) {
-	        throw new RuntimeException("No patient profile found for user: " + user.getUsername());
+	        return null;
 	    }
 		
 	    PatientUpdateDTO dto = new PatientUpdateDTO();
@@ -92,7 +98,7 @@ public class PatientServiceImpl implements PatientService{
 		//user has linked patient entity
 		Patient patient = user.getPatient();
 		if (patient == null) {
-	        throw new RuntimeException("No patient found for user");
+	        throw new RuntimeException("No patient found for user, Kindly update your patient profile");
 	    }
 		
 		Optional<PatientInsurance> existingPlan = patientInsuranceRepository.findByPatient(patient);
@@ -108,6 +114,7 @@ public class PatientServiceImpl implements PatientService{
 		
 		patientInsurance.setPatient(patient);
 		patientInsurance.setInsurancePlan(insurancePlan);
+		patientInsurance.setCoverageBalance(insurancePlan.getCoverageAmount());
 		
 	    // Manually set startDate so @PrePersist can use it
 	    patientInsurance.setStartDate(LocalDate.now());
@@ -129,9 +136,11 @@ public class PatientServiceImpl implements PatientService{
                 pi.getInsurancePlan().getPlanName(),
                 pi.getInsurancePlan().getCoverageAmount(),
                 pi.getInsurancePlan().getPremiumAmount(),
+                pi.getCoverageBalance(),
                 pi.getInsurancePlan().getPolicyTerm(),
                 pi.getInsurancePlan().getDescription(),
-                pi.getStartDate()
+                pi.getStartDate(),
+                pi.getEndDate()
         )).collect(Collectors.toList());
 
 	}
@@ -175,6 +184,14 @@ public class PatientServiceImpl implements PatientService{
 
         InsurancePlan insurancePlan = insurancePlanRepository.findById(dto.getInsurancePlanId())
                 .orElseThrow(() -> new RuntimeException("Insurance plan not found"));
+        
+        PatientInsurance patientInsurance = patientInsuranceRepository
+                .findByPatientPatientIdAndStatus(patient.getPatientId(), "ACTIVE")
+                .orElseThrow(() -> new RuntimeException("No active insurance plan found for this patient"));
+        
+        if(patientInsurance.getCoverageBalance().compareTo(invoice.getTotalAmount()) < 0) {
+        	 throw new RuntimeException("Not enough balance for this claim.");
+        }
 
         Claim claim = new Claim();
         claim.setPatient(patient);
@@ -191,9 +208,7 @@ public class PatientServiceImpl implements PatientService{
 
         // Fetch invoice amount directly from invoice entity
         claim.setInvoiceAmount(invoice.getTotalAmount());
-        claim.setClaimAmount(dto.getClaimAmount());
-
-        claim.setMedicalDocuments(dto.getMedicalDocuments());
+        claim.setClaimAmount(invoice.getTotalAmount());
 
         claim.setStatus("SUBMITTED");
 
@@ -201,6 +216,31 @@ public class PatientServiceImpl implements PatientService{
 
         return "Claim submitted successfully";
     }
+	
+	public List<GetAllClaimHistoryDTO> getClaims(User user) {
+	    Patient patient = user.getPatient();
+	    if (patient == null) {
+	        throw new RuntimeException("No patient found for user");
+	    }
+
+	    List<Claim> claims = claimRepository.findByPatient(patient);
+
+	    return claims.stream()
+	            .map(c -> new GetAllClaimHistoryDTO(
+	                    c.getClaimId(),
+	                    c.getClaimAmount(),
+	                    c.getInvoiceAmount(),
+	                    c.getDateOfService(),
+	                    c.getDiagnosis(),
+	                    c.getTreatment(),
+	                    c.getStatus(),
+	                    c.getSubmittedAt(),
+	                    c.getReviewedAt(),
+	                    c.getApprovedAt()
+	            ))
+	            .collect(Collectors.toList());
+	}
+
 	
 	public String markInvoiceAsPaid(int invoiceId, User user) {
 	    Patient patient = user.getPatient();
@@ -220,5 +260,27 @@ public class PatientServiceImpl implements PatientService{
 
 	    return "Invoice marked as PAID";
 	}
+	
+	public List<GetAllPaymentDTO> getPaymentsForPatient(User user) {
+	    Patient patient = user.getPatient();
+	    if (patient == null) {
+	        throw new RuntimeException("No patient found for user");
+	    }
+
+	    List<Payment> payments = paymentRepository.findByPatient(patient);
+
+	    return payments.stream()
+	            .map(p -> new GetAllPaymentDTO(
+	                    p.getPaymentId(),
+	                    p.getClaim().getClaimId(),
+	                    p.getInsuranceCompany().getUserId(),
+	                    p.getPatient().getPatientId(),
+	                    p.getAmountPaid(),
+	                    p.getPaymentDate()
+	            ))
+	            .collect(Collectors.toList());
+	}
+
+
 
 }

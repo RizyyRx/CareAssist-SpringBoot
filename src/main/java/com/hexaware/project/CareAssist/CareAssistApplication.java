@@ -10,7 +10,7 @@ public class CareAssistApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CareAssistApplication.class, args);
 //	    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-//	    String encoded = encoder.encode("admin");
+//	    String encoded = encoder.encode("123");
 //	    System.out.println(encoded);
 	}
 

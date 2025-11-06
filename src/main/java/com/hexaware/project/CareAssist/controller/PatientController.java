@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hexaware.project.CareAssist.dto.ClaimSubmissionDTO;
+import com.hexaware.project.CareAssist.dto.GetAllClaimHistoryDTO;
+import com.hexaware.project.CareAssist.dto.GetAllPaymentDTO;
 import com.hexaware.project.CareAssist.dto.InvoiceViewDTO;
 import com.hexaware.project.CareAssist.dto.PatientInsuranceDTO;
 import com.hexaware.project.CareAssist.dto.PatientUpdateDTO;
@@ -112,6 +114,19 @@ public class PatientController {
 	        return new ResponseEntity<>(message, HttpStatus.CREATED);
 	    }
 	 
+	 //get current claims
+	 @PreAuthorize("hasRole('PATIENT')")
+	 @GetMapping("/claims")
+	 public ResponseEntity<List<GetAllClaimHistoryDTO>> getClaimHistory(Authentication authentication) {
+
+	     String username = authentication.getName();
+	     User user = userRepository.findByUsername(username)
+	             .orElseThrow(() -> new RuntimeException("User not found"));
+
+	     List<GetAllClaimHistoryDTO> claims = patientService.getClaims(user);
+	     return ResponseEntity.ok(claims);
+	 }
+	 
 	 // Mark status as PAID in invoice
 	 @PreAuthorize("hasRole('PATIENT')")
 	 @PatchMapping("/invoice/mark-paid/{invoiceId}")
@@ -125,5 +140,17 @@ public class PatientController {
 
 	     return ResponseEntity.ok(message);
 	 }
+	 
+	 @PreAuthorize("hasRole('PATIENT')")
+	 @GetMapping("/payments")
+	 public ResponseEntity<List<GetAllPaymentDTO>> getPatientPayments(Authentication authentication) {
+	     String username = authentication.getName();
+	     User user = userRepository.findByUsername(username)
+	             .orElseThrow(() -> new RuntimeException("User not found"));
+
+	     List<GetAllPaymentDTO> payments = patientService.getPaymentsForPatient(user);
+	     return ResponseEntity.ok(payments);
+	 }
+
 	
 }

@@ -16,9 +16,6 @@ public class PaymentRequestDTO {
     @DecimalMin("0.01")
     private BigDecimal amountPaid;
 
-    @NotBlank
-    private String transactionRef;
-
     public Integer getClaimId() {
 		return claimId;
 	}
@@ -33,14 +30,6 @@ public class PaymentRequestDTO {
 
 	public void setAmountPaid(BigDecimal amountPaid) {
 		this.amountPaid = amountPaid;
-	}
-
-	public String getTransactionRef() {
-		return transactionRef;
-	}
-
-	public void setTransactionRef(String transactionRef) {
-		this.transactionRef = transactionRef;
 	}
 
 }

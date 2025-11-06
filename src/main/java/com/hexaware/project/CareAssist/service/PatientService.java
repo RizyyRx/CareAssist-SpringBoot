@@ -3,6 +3,8 @@ package com.hexaware.project.CareAssist.service;
 import java.util.List;
 
 import com.hexaware.project.CareAssist.dto.ClaimSubmissionDTO;
+import com.hexaware.project.CareAssist.dto.GetAllClaimHistoryDTO;
+import com.hexaware.project.CareAssist.dto.GetAllPaymentDTO;
 import com.hexaware.project.CareAssist.dto.InvoiceViewDTO;
 import com.hexaware.project.CareAssist.dto.PatientInsuranceDTO;
 import com.hexaware.project.CareAssist.dto.PatientUpdateDTO;
@@ -24,5 +26,9 @@ public interface PatientService {
 	String submitClaim(User user, ClaimSubmissionDTO dto);
 	
 	String markInvoiceAsPaid(int invoiceId, User user);
+	
+	List<GetAllClaimHistoryDTO> getClaims(User user);
+	
+	List<GetAllPaymentDTO> getPaymentsForPatient(User user); 
 
 }

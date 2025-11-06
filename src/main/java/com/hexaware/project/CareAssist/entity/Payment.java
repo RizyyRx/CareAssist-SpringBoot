@@ -36,11 +36,6 @@ public class Payment {
     @Column(nullable = false, updatable = false)
     private LocalDate paymentDate;
 
-    @NotBlank(message = "Transaction reference is required")
-    @Column(nullable = false, unique = true, length = 50)
-    private String transactionRef;
-    
-
     public int getPaymentId() {
 		return paymentId;
 	}
@@ -89,21 +84,13 @@ public class Payment {
 		this.paymentDate = paymentDate;
 	}
 
-	public String getTransactionRef() {
-		return transactionRef;
-	}
-
-	public void setTransactionRef(String transactionRef) {
-		this.transactionRef = transactionRef;
-	}
-
 	public Payment() {
 		super();
 	}
 
 	public Payment(int paymentId, Claim claim, User insuranceCompany, Patient patient,
 			@NotNull(message = "Payment amount is required") @DecimalMin(value = "0.01", message = "Payment must be greater than 0") BigDecimal amountPaid,
-			LocalDate paymentDate, @NotBlank(message = "Transaction reference is required") String transactionRef) {
+			LocalDate paymentDate) {
 		super();
 		this.paymentId = paymentId;
 		this.claim = claim;
@@ -111,14 +98,12 @@ public class Payment {
 		this.patient = patient;
 		this.amountPaid = amountPaid;
 		this.paymentDate = paymentDate;
-		this.transactionRef = transactionRef;
 	}
 
 	@Override
 	public String toString() {
 		return "Payment [paymentId=" + paymentId + ", claim=" + claim + ", insuranceCompany=" + insuranceCompany
-				+ ", patient=" + patient + ", amountPaid=" + amountPaid + ", paymentDate=" + paymentDate
-				+ ", transactionRef=" + transactionRef + "]";
+				+ ", patient=" + patient + ", amountPaid=" + amountPaid + ", paymentDate=" + paymentDate+ "]";
 	}
 
 }

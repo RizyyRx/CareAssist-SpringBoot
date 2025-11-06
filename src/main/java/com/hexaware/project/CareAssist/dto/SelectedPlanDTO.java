@@ -5,28 +5,33 @@ import java.time.LocalDate;
 
 public class SelectedPlanDTO {
 
-    private int planId;
+	private int planId;
     private String planName;
     private BigDecimal coverageAmount;
     private BigDecimal premiumAmount;
+	private BigDecimal coverageBalance;
     private int policyTerm;
     private String description;
     private LocalDate startDate;
+	private LocalDate endDate;
+    
 
     public SelectedPlanDTO() {}
 
-    public SelectedPlanDTO(int planId, String planName, BigDecimal coverageAmount, 
-                           BigDecimal premiumAmount, int policyTerm, 
-                           String description, LocalDate startDate) {
-        this.planId = planId;
-        this.planName = planName;
-        this.coverageAmount = coverageAmount;
-        this.premiumAmount = premiumAmount;
-        this.policyTerm = policyTerm;
-        this.description = description;
-        this.startDate = startDate;
-    }
-
+    public SelectedPlanDTO(int planId, String planName, BigDecimal coverageAmount, BigDecimal premiumAmount,
+			BigDecimal coverageBalance, int policyTerm, String description, LocalDate startDate, LocalDate endDate) {
+		super();
+		this.planId = planId;
+		this.planName = planName;
+		this.coverageAmount = coverageAmount;
+		this.premiumAmount = premiumAmount;
+		this.coverageBalance = coverageBalance;
+		this.policyTerm = policyTerm;
+		this.description = description;
+		this.startDate = startDate;
+		this.endDate = endDate;
+	}
+    
     public int getPlanId() {
         return planId;
     }
@@ -59,6 +64,14 @@ public class SelectedPlanDTO {
         this.premiumAmount = premiumAmount;
     }
 
+    public BigDecimal getCoverageBalance() {
+		return coverageBalance;
+	}
+
+	public void setCoverageBalance(BigDecimal coverageBalance) {
+		this.coverageBalance = coverageBalance;
+	}
+	
     public int getPolicyTerm() {
         return policyTerm;
     }
@@ -82,4 +95,12 @@ public class SelectedPlanDTO {
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
+    
+    public LocalDate getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(LocalDate endDate) {
+		this.endDate = endDate;
+	}
 }

@@ -38,6 +38,7 @@ public class InsurancePlan {
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal premiumAmount;
 
+
     @NotNull(message = "Policy term is required")
     @Positive(message = "Policy term must be positive")
     @Column(nullable = false)
@@ -52,8 +53,37 @@ public class InsurancePlan {
     // One insurancePlan can have many patientInsurance records
     @OneToMany(mappedBy = "insurancePlan", cascade = CascadeType.ALL)
     private List<PatientInsurance> patientInsurance;
+    
+	@Override
+	public String toString() {
+		return "InsurancePlan [planId=" + planId + ", insuranceCompany=" + insuranceCompany + ", planName=" + planName
+				+ ", coverageAmount=" + coverageAmount + ", premiumAmount=" + premiumAmount + ", policyTerm=" + policyTerm + ", description=" + description + ", createdAt="
+				+ createdAt + ", patientInsurance=" + patientInsurance + "]";
+	}
 
-    public int getPlanId() {
+	public InsurancePlan() {
+		super();
+	}
+
+	public InsurancePlan(int planId, @NotNull(message = "Insurance company is required") User insuranceCompany,
+			@NotBlank(message = "Plan name is required") String planName,
+			@NotNull(message = "Coverage amount is required") @Positive(message = "Coverage amount must be positive") BigDecimal coverageAmount,
+			@NotNull(message = "Premium amount is required") @Positive(message = "Premium amount must be positive") BigDecimal premiumAmount,
+			@NotNull(message = "Policy term is required") @Positive(message = "Policy term must be positive") int policyTerm,
+			String description, LocalDateTime createdAt, List<PatientInsurance> patientInsurance) {
+		super();
+		this.planId = planId;
+		this.insuranceCompany = insuranceCompany;
+		this.planName = planName;
+		this.coverageAmount = coverageAmount;
+		this.premiumAmount = premiumAmount;
+		this.policyTerm = policyTerm;
+		this.description = description;
+		this.createdAt = createdAt;
+		this.patientInsurance = patientInsurance;
+	}
+
+	public int getPlanId() {
 		return planId;
 	}
 
@@ -123,36 +153,6 @@ public class InsurancePlan {
 
 	public void setPatientInsurance(List<PatientInsurance> patientInsurance) {
 		this.patientInsurance = patientInsurance;
-	}
-
-	public InsurancePlan() {
-		super();
-	}
-
-	public InsurancePlan(int planId, @NotNull(message = "Insurance company is required") User insuranceCompany,
-			@NotBlank(message = "Plan name is required") String planName,
-			@NotNull(message = "Coverage amount is required") @Positive(message = "Coverage amount must be positive") BigDecimal coverageAmount,
-			@NotNull(message = "Premium amount is required") @Positive(message = "Premium amount must be positive") BigDecimal premiumAmount,
-			@NotNull(message = "Policy term is required") @Positive(message = "Policy term must be positive") int policyTerm,
-			String description, LocalDateTime createdAt, List<PatientInsurance> patientInsurance) {
-		super();
-		this.planId = planId;
-		this.insuranceCompany = insuranceCompany;
-		this.planName = planName;
-		this.coverageAmount = coverageAmount;
-		this.premiumAmount = premiumAmount;
-		this.policyTerm = policyTerm;
-		this.description = description;
-		this.createdAt = createdAt;
-		this.patientInsurance = patientInsurance;
-	}
-
-	@Override
-	public String toString() {
-		return "InsurancePlan [planId=" + planId + ", insuranceCompany=" + insuranceCompany + ", planName=" + planName
-				+ ", coverageAmount=" + coverageAmount + ", premiumAmount=" + premiumAmount + ", policyTerm="
-				+ policyTerm + ", description=" + description + ", createdAt=" + createdAt + ", patientInsurance="
-				+ patientInsurance + "]";
 	}
 
 

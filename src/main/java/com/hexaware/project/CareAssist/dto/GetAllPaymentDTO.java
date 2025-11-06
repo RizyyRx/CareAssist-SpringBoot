@@ -11,20 +11,18 @@ public class GetAllPaymentDTO {
     private int patientId;
     private BigDecimal amountPaid;
     private LocalDate paymentDate;
-    private String transactionRef;
 
     // Constructors
     public GetAllPaymentDTO() {}
 
     public GetAllPaymentDTO(int paymentId, int claimId, int insuranceCompanyId, int patientId,
-                      BigDecimal amountPaid, LocalDate paymentDate, String transactionRef) {
+                      BigDecimal amountPaid, LocalDate paymentDate) {
         this.paymentId = paymentId;
         this.claimId = claimId;
         this.insuranceCompanyId = insuranceCompanyId;
         this.patientId = patientId;
         this.amountPaid = amountPaid;
         this.paymentDate = paymentDate;
-        this.transactionRef = transactionRef;
     }
 
     // Getters and Setters
@@ -74,13 +72,5 @@ public class GetAllPaymentDTO {
 
     public void setPaymentDate(LocalDate paymentDate) {
         this.paymentDate = paymentDate;
-    }
-
-    public String getTransactionRef() {
-        return transactionRef;
-    }
-
-    public void setTransactionRef(String transactionRef) {
-        this.transactionRef = transactionRef;
     }
 }

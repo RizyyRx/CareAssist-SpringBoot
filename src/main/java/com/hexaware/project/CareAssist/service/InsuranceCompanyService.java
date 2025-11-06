@@ -16,7 +16,7 @@ public interface InsuranceCompanyService {
 	
 	String reviewAndApproveClaim(int claimId);
 	
-	String processClaimPayment(User insuranceCompany, int claimId, BigDecimal amountPaid, String transactionRef);
+	String processClaimPayment(User insuranceCompany, int claimId, BigDecimal amountPaid);
 	
 	List<GetAllClaimHistoryDTO> getClaimsByPatientId(int patientId);
 	

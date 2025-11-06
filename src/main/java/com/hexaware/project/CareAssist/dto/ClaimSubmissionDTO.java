@@ -24,12 +24,6 @@ public class ClaimSubmissionDTO {
     @NotNull(message = "Date of service is required")
     private LocalDate dateOfService;
 
-    @NotNull(message = "Claim amount is required")
-    @Positive
-    private BigDecimal claimAmount;
-
-    private String medicalDocuments; // JSON string or base64 encoded files
-
 	
     public Integer getInvoiceId() {
 		return invoiceId;
@@ -69,22 +63,6 @@ public class ClaimSubmissionDTO {
 
 	public void setDateOfService(LocalDate dateOfService) {
 		this.dateOfService = dateOfService;
-	}
-
-	public BigDecimal getClaimAmount() {
-		return claimAmount;
-	}
-
-	public void setClaimAmount(BigDecimal claimAmount) {
-		this.claimAmount = claimAmount;
-	}
-
-	public String getMedicalDocuments() {
-		return medicalDocuments;
-	}
-
-	public void setMedicalDocuments(String medicalDocuments) {
-		this.medicalDocuments = medicalDocuments;
 	}
 
 

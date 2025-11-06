@@ -37,7 +37,7 @@ public class AdminController {
     }
     
     // Get all claims
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','INSURANCE_COMPANY')")
     @GetMapping("/get-claims")
     public ResponseEntity<List<GetAllClaimHistoryDTO>> getAllClaims() {
         List<GetAllClaimHistoryDTO> claims = adminService.getAllClaims();
@@ -45,7 +45,7 @@ public class AdminController {
     }
     
     // Get all payments
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','INSURANCE_COMPANY')")
     @GetMapping("/get-payments")
     public ResponseEntity<List<GetAllPaymentDTO>> getAllPayments() {
         List<GetAllPaymentDTO> payments = adminService.getAllPayments();

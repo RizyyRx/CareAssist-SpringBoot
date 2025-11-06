@@ -78,8 +78,7 @@ public class InsuranceCompanyController {
         String result = insuranceCompanyService.processClaimPayment(
             insuranceCompany,
             paymentRequest.getClaimId(),
-            paymentRequest.getAmountPaid(),
-            paymentRequest.getTransactionRef());
+            paymentRequest.getAmountPaid());
 
         return ResponseEntity.ok(result);
     }

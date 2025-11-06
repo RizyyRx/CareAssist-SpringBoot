@@ -79,10 +79,6 @@ public class Claim {
 
     private LocalDateTime reviewedAt;
     private LocalDateTime approvedAt;
-
-    // File uploads / attachments (store as JSON string in DB)
-    @Column(columnDefinition = "JSON")
-    private String medicalDocuments;
     
 
     public int getClaimId() {
@@ -213,14 +209,6 @@ public class Claim {
 		this.approvedAt = approvedAt;
 	}
 
-	public String getMedicalDocuments() {
-		return medicalDocuments;
-	}
-
-	public void setMedicalDocuments(String medicalDocuments) {
-		this.medicalDocuments = medicalDocuments;
-	}
-
 	public Claim() {
 		super();
 	}
@@ -237,7 +225,7 @@ public class Claim {
 			@NotNull(message = "Invoice amount is required") @Positive(message = "Invoice amount must be positive") BigDecimal invoiceAmount,
 			@NotNull(message = "Claim amount is required") @Positive(message = "Claim amount must be positive") BigDecimal claimAmount,
 			@NotBlank(message = "Status is required") String status, LocalDateTime submittedAt,
-			LocalDateTime reviewedAt, LocalDateTime approvedAt, String medicalDocuments) {
+			LocalDateTime reviewedAt, LocalDateTime approvedAt) {
 		super();
 		this.claimId = claimId;
 		this.patient = patient;
@@ -255,7 +243,6 @@ public class Claim {
 		this.submittedAt = submittedAt;
 		this.reviewedAt = reviewedAt;
 		this.approvedAt = approvedAt;
-		this.medicalDocuments = medicalDocuments;
 	}
 
 	@Override
@@ -264,8 +251,7 @@ public class Claim {
 				+ insurancePlan + ", patientName=" + patientName + ", patientDob=" + patientDob + ", patientAddress="
 				+ patientAddress + ", diagnosis=" + diagnosis + ", treatment=" + treatment + ", dateOfService="
 				+ dateOfService + ", invoiceAmount=" + invoiceAmount + ", claimAmount=" + claimAmount + ", status="
-				+ status + ", submittedAt=" + submittedAt + ", reviewedAt=" + reviewedAt + ", approvedAt=" + approvedAt
-				+ ", medicalDocuments=" + medicalDocuments + "]";
+				+ status + ", submittedAt=" + submittedAt + ", reviewedAt=" + reviewedAt + ", approvedAt=" + approvedAt+ "]";
 	}
 
 

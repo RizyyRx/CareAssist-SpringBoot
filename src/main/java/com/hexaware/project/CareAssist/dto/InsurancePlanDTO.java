@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Positive;
 
 public class InsurancePlanDTO {
 	
-	@NotBlank(message = "Plan id is required")
+	@NotNull(message = "Plan id is required")
 	private int planId;
 
     @NotBlank(message = "Plan name is required")
@@ -21,6 +21,9 @@ public class InsurancePlanDTO {
     @NotNull(message = "Premium amount is required")
     @Positive(message = "Premium amount must be positive")
     private BigDecimal premiumAmount;
+
+    @Positive(message = "Coverage balance must be positive")
+    private BigDecimal coverageBalance;
 
     @NotNull(message = "Policy term is required")
     @Positive(message = "Policy term must be positive")
@@ -60,6 +63,14 @@ public class InsurancePlanDTO {
 		this.premiumAmount = premiumAmount;
 	}
 
+    public BigDecimal getCoverageBalance() {
+		return coverageBalance;
+	}
+
+	public void setCoverageBalance(BigDecimal coverageBalance) {
+		this.coverageBalance = coverageBalance;
+	}
+	
 	public Integer getPolicyTerm() {
 		return policyTerm;
 	}

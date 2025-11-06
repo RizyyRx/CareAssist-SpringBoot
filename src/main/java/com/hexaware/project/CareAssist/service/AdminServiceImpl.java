@@ -87,8 +87,7 @@ public class AdminServiceImpl implements AdminService{
                 p.getInsuranceCompany().getUserId(),
                 p.getPatient().getPatientId(),
                 p.getAmountPaid(),
-                p.getPaymentDate(),
-                p.getTransactionRef()
+                p.getPaymentDate()
             )).collect(Collectors.toList());
     }
 	

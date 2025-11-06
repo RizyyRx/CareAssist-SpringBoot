@@ -13,4 +13,7 @@ public interface PatientInsuranceRepository extends JpaRepository<PatientInsuran
 	List<PatientInsurance> findByPatientPatientId(int patientId);
 	
 	Optional<PatientInsurance> findByPatient(Patient patient);
+	
+	Optional<PatientInsurance> findByPatientPatientIdAndStatus(int patientId, String status);
+
 }
