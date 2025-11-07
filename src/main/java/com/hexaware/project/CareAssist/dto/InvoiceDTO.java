@@ -1,19 +1,24 @@
 package com.hexaware.project.CareAssist.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public class InvoiceDTO {
 	
 	@NotNull(message = "Patient ID is required")
     private Integer patientId;
 
+    @Positive(message = "Consultation fee must be positive")
     private BigDecimal consultationFee;
+
+    @Positive(message = "Diagnostic tests fee must be positive")
     private BigDecimal diagnosticTestsFee;
+
+    @Positive(message = "Diagnostic scan fee must be positive")
     private BigDecimal diagnosticScanFee;
+
+    @Positive(message = "Medication fee must be positive")
     private BigDecimal medicationFee;
 
     public Integer getPatientId() {
@@ -55,6 +60,4 @@ public class InvoiceDTO {
 	public void setMedicationFee(BigDecimal medicationFee) {
 		this.medicationFee = medicationFee;
 	}
-
-
 }

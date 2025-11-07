@@ -58,7 +58,7 @@ public class PatientController {
 	// Update patient profile
 	@PreAuthorize("hasRole('PATIENT')")
 	@PutMapping("/update-profile")
-	public ResponseEntity<String> updateProfile(@RequestBody PatientUpdateDTO dto,Authentication authentication) {
+	public ResponseEntity<String> updateProfile(@Valid @RequestBody PatientUpdateDTO dto,Authentication authentication) {
 
 	    String username = authentication.getName(); // Extract from JWT
 	    User user = userRepository.findByUsername(username)

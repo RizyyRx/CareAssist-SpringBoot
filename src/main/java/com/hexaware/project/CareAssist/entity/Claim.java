@@ -7,9 +7,6 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 
 @Entity
 @Table(name = "claims")
@@ -21,55 +18,41 @@ public class Claim {
 
     @ManyToOne // Many claims for one patient
     @JoinColumn(name = "patient_id", nullable = false)
-    @NotNull(message = "Patient is required")
     private Patient patient;
 
     @OneToOne // one claim for one invoice 
     @JoinColumn(name = "invoice_id", nullable = false)
-    @NotNull(message = "Invoice is required")
     private Invoice invoice;
 
     @ManyToOne // Many claims for one insurancePlan
     @JoinColumn(name = "insurance_plan_id", nullable = false)
-    @NotNull(message = "Insurance plan is required")
     private InsurancePlan insurancePlan;
 
-    @NotBlank(message = "Patient name is required")
     @Column(nullable = false)
     private String patientName;
 
-    @NotNull(message = "Patient date of birth is required")
     @Column(nullable = false)
     private LocalDate patientDob;
 
-    @NotBlank(message = "Patient address is required")
     @Column(nullable = false)
     private String patientAddress;
 
     // Medical service details
-    @NotBlank(message = "Diagnosis is required")
     @Column(nullable = false)
     private String diagnosis;
 
-    @NotBlank(message = "Treatment is required")
     @Column(nullable = false)
     private String treatment;
 
-    @NotNull(message = "Date of service is required")
     @Column(nullable = false)
     private LocalDate dateOfService;
 
-    @NotNull(message = "Invoice amount is required")
-    @Positive(message = "Invoice amount must be positive")
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal invoiceAmount;
 
-    @NotNull(message = "Claim amount is required")
-    @Positive(message = "Claim amount must be positive")
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal claimAmount;
 
-    @NotBlank(message = "Status is required")
     @Column(nullable = false)
     private String status;
 
@@ -213,18 +196,18 @@ public class Claim {
 		super();
 	}
 
-	public Claim(int claimId, @NotNull(message = "Patient is required") Patient patient,
-			@NotNull(message = "Invoice is required") Invoice invoice,
-			@NotNull(message = "Insurance plan is required") InsurancePlan insurancePlan,
-			@NotBlank(message = "Patient name is required") String patientName,
-			@NotNull(message = "Patient date of birth is required") LocalDate patientDob,
-			@NotBlank(message = "Patient address is required") String patientAddress,
-			@NotBlank(message = "Diagnosis is required") String diagnosis,
-			@NotBlank(message = "Treatment is required") String treatment,
-			@NotNull(message = "Date of service is required") LocalDate dateOfService,
-			@NotNull(message = "Invoice amount is required") @Positive(message = "Invoice amount must be positive") BigDecimal invoiceAmount,
-			@NotNull(message = "Claim amount is required") @Positive(message = "Claim amount must be positive") BigDecimal claimAmount,
-			@NotBlank(message = "Status is required") String status, LocalDateTime submittedAt,
+	public Claim(int claimId, Patient patient,
+			Invoice invoice,
+			InsurancePlan insurancePlan,
+			String patientName,
+			LocalDate patientDob,
+			String patientAddress,
+			String diagnosis,
+			String treatment,
+			LocalDate dateOfService,
+			BigDecimal invoiceAmount,
+			BigDecimal claimAmount,
+			String status, LocalDateTime submittedAt,
 			LocalDateTime reviewedAt, LocalDateTime approvedAt) {
 		super();
 		this.claimId = claimId;

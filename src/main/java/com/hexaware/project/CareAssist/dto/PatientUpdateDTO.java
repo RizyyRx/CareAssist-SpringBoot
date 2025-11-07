@@ -2,12 +2,25 @@ package com.hexaware.project.CareAssist.dto;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 public class PatientUpdateDTO {
 	
+	@NotBlank(message = "First name is required")
 	private String firstName;
     private String lastName;
+    
+    @Past(message = "Date of birth must be in the past")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dob;
     private String gender;
+    @Size(min = 10, max = 15, message = "Contact number must be between 10–15 digits")
+    @Pattern(regexp = "^[0-9]+$", message = "Contact number must contain only digits")
     private String contactNumber;
     private String address;
     private String medicalHistory;

@@ -2,14 +2,8 @@ package com.hexaware.project.CareAssist.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 
 @Entity
 @Table(name = "invoices")
@@ -21,36 +15,28 @@ public class Invoice {
 
     @ManyToOne // Many invoices for one patient
     @JoinColumn(name = "patient_id", nullable = false)
-    @NotNull(message = "Patient is required")
     private Patient patient;
 
     @ManyToOne  // Many invoices for one provider (User with role="PROVIDER")
     @JoinColumn(name = "provider_id", nullable = false)
-    @NotNull(message = "Provider is required")
     private User provider;
 
-    @NotNull(message = "Invoice date is required")
     @Column(nullable = false, updatable = false)
     private LocalDate invoiceDate;
 
-    @NotNull(message = "Due date is required")
     @Column(nullable = false)
     private LocalDate dueDate;
 
     // Fee breakdown (optional, can be null if not applicable)
-    @Positive(message = "Consultation fee must be positive")
     @Column(precision = 12, scale = 2)
     private BigDecimal consultationFee;
 
-    @Positive(message = "Diagnostic tests fee must be positive")
     @Column(precision = 12, scale = 2)
     private BigDecimal diagnosticTestsFee;
 
-    @Positive(message = "Diagnostic scan fee must be positive")
     @Column(precision = 12, scale = 2)
     private BigDecimal diagnosticScanFee;
 
-    @Positive(message = "Medication fee must be positive")
     @Column(precision = 12, scale = 2)
     private BigDecimal medicationFee;
 
@@ -197,15 +183,15 @@ public class Invoice {
 		super();
 	}
 
-	public Invoice(int invoiceId, @NotNull(message = "Patient is required") Patient patient,
-			@NotNull(message = "Provider is required") User provider,
-			@NotNull(message = "Invoice date is required") LocalDate invoiceDate,
-			@NotNull(message = "Due date is required") LocalDate dueDate,
-			@Positive(message = "Consultation fee must be positive") BigDecimal consultationFee,
-			@Positive(message = "Diagnostic tests fee must be positive") BigDecimal diagnosticTestsFee,
-			@Positive(message = "Diagnostic scan fee must be positive") BigDecimal diagnosticScanFee,
-			@Positive(message = "Medication fee must be positive") BigDecimal medicationFee, BigDecimal subtotal,
-			BigDecimal tax, BigDecimal totalAmount, @NotBlank(message = "Status is required") String status) {
+	public Invoice(int invoiceId, Patient patient,
+			User provider,
+			LocalDate invoiceDate,
+			LocalDate dueDate,
+			BigDecimal consultationFee,
+			BigDecimal diagnosticTestsFee,
+			BigDecimal diagnosticScanFee,
+			BigDecimal medicationFee, BigDecimal subtotal,
+			BigDecimal tax, BigDecimal totalAmount, String status) {
 		super();
 		this.invoiceId = invoiceId;
 		this.patient = patient;

@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
@@ -27,8 +26,6 @@ public class Payment {
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
-    @NotNull(message = "Payment amount is required")
-    @DecimalMin(value = "0.01", message = "Payment must be greater than 0")
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal amountPaid;
 
@@ -89,8 +86,7 @@ public class Payment {
 	}
 
 	public Payment(int paymentId, Claim claim, User insuranceCompany, Patient patient,
-			@NotNull(message = "Payment amount is required") @DecimalMin(value = "0.01", message = "Payment must be greater than 0") BigDecimal amountPaid,
-			LocalDate paymentDate) {
+			BigDecimal amountPaid, LocalDate paymentDate) {
 		super();
 		this.paymentId = paymentId;
 		this.claim = claim;

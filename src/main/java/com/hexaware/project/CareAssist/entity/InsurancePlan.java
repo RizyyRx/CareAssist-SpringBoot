@@ -7,9 +7,6 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 
 @Entity
 @Table(name = "insurance_plans")
@@ -21,26 +18,17 @@ public class InsurancePlan {
 
     @ManyToOne // Many insurancePlan will be there for one user
     @JoinColumn(name = "insurance_company_id", nullable = false)
-    @NotNull(message = "Insurance company is required")
     private User insuranceCompany;
 
-    @NotBlank(message = "Plan name is required")
     @Column(nullable = false)
     private String planName;
 
-    @NotNull(message = "Coverage amount is required")
-    @Positive(message = "Coverage amount must be positive")
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal coverageAmount;
 
-    @NotNull(message = "Premium amount is required")
-    @Positive(message = "Premium amount must be positive")
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal premiumAmount;
 
-
-    @NotNull(message = "Policy term is required")
-    @Positive(message = "Policy term must be positive")
     @Column(nullable = false)
     private int policyTerm;
 
@@ -65,11 +53,11 @@ public class InsurancePlan {
 		super();
 	}
 
-	public InsurancePlan(int planId, @NotNull(message = "Insurance company is required") User insuranceCompany,
-			@NotBlank(message = "Plan name is required") String planName,
-			@NotNull(message = "Coverage amount is required") @Positive(message = "Coverage amount must be positive") BigDecimal coverageAmount,
-			@NotNull(message = "Premium amount is required") @Positive(message = "Premium amount must be positive") BigDecimal premiumAmount,
-			@NotNull(message = "Policy term is required") @Positive(message = "Policy term must be positive") int policyTerm,
+	public InsurancePlan(int planId, User insuranceCompany,
+			String planName,
+			BigDecimal coverageAmount,
+			BigDecimal premiumAmount,
+			int policyTerm,
 			String description, LocalDateTime createdAt, List<PatientInsurance> patientInsurance) {
 		super();
 		this.planId = planId;

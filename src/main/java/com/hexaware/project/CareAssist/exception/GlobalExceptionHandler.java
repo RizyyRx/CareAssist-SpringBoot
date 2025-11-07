@@ -3,6 +3,7 @@ package com.hexaware.project.CareAssist.exception;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingPathVariableException;
@@ -55,6 +56,21 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<String> handleMissingRequestParam(MissingServletRequestParameterException ex) {
         String msg = "Missing request parameter: " + ex.getParameterName();
+        return ResponseEntity.badRequest().body(msg);
+    }
+    
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<String> handleJsonParseErrors(HttpMessageNotReadableException ex) {
+        String msg = "Invalid input format. Please check the provided data.";
+
+        if (ex.getMessage() != null) {
+            if (ex.getMessage().contains("java.lang.Integer")) {
+                msg = "Invalid number format.";
+            } else if (ex.getMessage().contains("LocalDate")) {
+                msg = "Invalid date format. Please use yyyy-MM-dd.";
+            }
+        }
+
         return ResponseEntity.badRequest().body(msg);
     }
     

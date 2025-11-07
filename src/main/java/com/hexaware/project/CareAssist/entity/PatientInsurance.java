@@ -6,10 +6,6 @@ import java.time.LocalDate;
 import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.FutureOrPresent;
 
 @Entity
 @Table(name = "patient_insurances")
@@ -22,28 +18,21 @@ public class PatientInsurance {
 
     @ManyToOne // Many patientInsurance can be there for one patient
     @JoinColumn(name = "patient_id", nullable = false)
-    @NotNull(message = "Patient is required")
     private Patient patient;
 
     @ManyToOne // Many patientInsurance can be there for one insurancePlan
     @JoinColumn(name = "plan_id", nullable = false)
-    @NotNull(message = "Insurance plan is required")
     private InsurancePlan insurancePlan;
 
     @Column(nullable = false, updatable = false)
     private LocalDate startDate;
 
-    @NotNull(message = "End date is required")
-    @FutureOrPresent(message = "End date must be today or in the future")
     @Column(nullable = false)
     private LocalDate endDate;
     
-    @NotNull(message = "Coverage balance is required")
-    @Positive(message = "Coverage balance must be positive")
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal coverageBalance;
 
-    @NotBlank(message = "Status is required")
     @Column(nullable = false, length = 20)
     private String status = "ACTIVE"; // e.g., ACTIVE, EXPIRED, CANCELLED
     
@@ -124,11 +113,11 @@ public class PatientInsurance {
 				+ ", coverageBalance=" + coverageBalance + ", status=" + status + "]";
 	}
 
-	public PatientInsurance(int patientInsuranceId, @NotNull(message = "Patient is required") Patient patient,
-			@NotNull(message = "Insurance plan is required") InsurancePlan insurancePlan, LocalDate startDate,
-			@NotNull(message = "End date is required") @FutureOrPresent(message = "End date must be today or in the future") LocalDate endDate,
-			@NotNull(message = "Coverage balance is required") @Positive(message = "Coverage balance must be positive") BigDecimal coverageBalance,
-			@NotBlank(message = "Status is required") String status) {
+	public PatientInsurance(int patientInsuranceId, Patient patient,
+			InsurancePlan insurancePlan, LocalDate startDate,
+			LocalDate endDate,
+			BigDecimal coverageBalance,
+			String status) {
 		super();
 		this.patientInsuranceId = patientInsuranceId;
 		this.patient = patient;

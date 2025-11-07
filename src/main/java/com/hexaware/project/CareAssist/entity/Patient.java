@@ -4,11 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "patients")
@@ -20,20 +15,16 @@ public class Patient {
 
     @OneToOne // One patient can be one user only
     @JoinColumn(name = "user_id", nullable = false, unique = true)
-    @NotNull(message = "User is required")
     private User user;
     
 
 	private String firstName;
 	private String lastName;
 
-    @Past(message = "Date of birth must be in the past")
     private LocalDate dob;
 
     private String gender;
 
-    @Size(min = 10, max = 15, message = "Contact number must be between 10–15 digits")
-    @Pattern(regexp = "^[0-9]+$", message = "Contact number must contain only digits")
     @Column(length = 15, unique = true)
     private String contactNumber;
 
@@ -143,9 +134,8 @@ public class Patient {
 		super();
 	}
 
-	public Patient(int patientId, @NotNull(message = "User is required") User user, String firstName, String lastName,
-			@Past(message = "Date of birth must be in the past") LocalDate dob, String gender,
-			@Size(min = 10, max = 15, message = "Contact number must be between 10–15 digits") @Pattern(regexp = "^[0-9]+$", message = "Contact number must contain only digits") String contactNumber,
+	public Patient(int patientId, User user, String firstName, String lastName,
+			LocalDate dob, String gender, String contactNumber,
 			String address, String medicalHistory, List<PatientInsurance> patientInsurance, List<Invoice> invoice) {
 		super();
 		this.patientId = patientId;

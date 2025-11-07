@@ -19,8 +19,6 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "users")
@@ -30,15 +28,12 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int userId;
 	
-	@NotBlank(message = "Username is required")
 	@Column(unique = true)
 	private String username;
 	
-	@NotBlank(message = "Email is required")
 	@Column(unique = true)
 	private String email;
 	
-	@NotBlank(message = "Password is required")
 	private String password;
 	
 	@CreationTimestamp
@@ -129,9 +124,7 @@ public class User {
 		super();
 	}
 
-	public User(int userId, @NotBlank(message = "Username is required") String username,
-			@NotBlank(message = "Email is required") String email,
-			@NotBlank(message = "Password is required") String password, LocalDateTime createdAt, Patient patient,
+	public User(int userId, String username, String email, String password, LocalDateTime createdAt, Patient patient,
 			List<InsurancePlan> insurancePlan, Set<Role> roles) {
 		super();
 		this.userId = userId;

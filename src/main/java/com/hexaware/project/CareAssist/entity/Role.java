@@ -15,7 +15,6 @@ public class Role {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotBlank(message = "Role is required")
 	private String name;
 
 	public Long getId() {

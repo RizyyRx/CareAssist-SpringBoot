@@ -3,17 +3,15 @@ package com.hexaware.project.CareAssist.dto;
 import java.math.BigDecimal;
 
 import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class PaymentRequestDTO {
 	
-
-	@NotNull
+	@NotNull(message = "Claim ID is required")
     private Integer claimId;
 
-    @NotNull
-    @DecimalMin("0.01")
+    @NotNull(message = "Payment amount is required")
+    @DecimalMin(value = "0.01", message = "Payment must be greater than 0")
     private BigDecimal amountPaid;
 
     public Integer getClaimId() {
