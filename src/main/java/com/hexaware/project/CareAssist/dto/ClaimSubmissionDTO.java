@@ -3,8 +3,11 @@ package com.hexaware.project.CareAssist.dto;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 
 public class ClaimSubmissionDTO {
 	
@@ -21,6 +24,8 @@ public class ClaimSubmissionDTO {
     private String treatment;
 
     @NotNull(message = "Date of service is required")
+    @PastOrPresent(message = "Date of service must be in the past or today")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dateOfService;
 
 	

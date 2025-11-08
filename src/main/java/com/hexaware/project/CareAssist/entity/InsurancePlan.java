@@ -32,6 +32,7 @@ public class InsurancePlan {
     @Column(nullable = false)
     private int policyTerm;
 
+    @Column(length = 1000)
     private String description; // Optional
 
     @CreationTimestamp

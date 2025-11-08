@@ -69,7 +69,7 @@ public class PatientServiceImpl implements PatientService{
 
 	    patientRepository.save(patient);
 
-	    return "Patient profile updated successfully for user: " + user.getUsername();
+	    return "Patient profile updated successfully" ;
 	}
 	
 	public PatientUpdateDTO getPatientProfile(User user) {
