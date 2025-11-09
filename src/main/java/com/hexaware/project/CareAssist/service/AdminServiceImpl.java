@@ -1,6 +1,7 @@
 package com.hexaware.project.CareAssist.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -14,12 +15,15 @@ import com.hexaware.project.CareAssist.dto.InvoiceViewDTO;
 import com.hexaware.project.CareAssist.entity.Claim;
 import com.hexaware.project.CareAssist.entity.Payment;
 import com.hexaware.project.CareAssist.entity.User;
+import com.hexaware.project.CareAssist.exception.ResourceNotFoundException;
 import com.hexaware.project.CareAssist.repository.ClaimRepository;
 import com.hexaware.project.CareAssist.repository.InvoiceRepository;
 import com.hexaware.project.CareAssist.repository.PatientInsuranceRepository;
 import com.hexaware.project.CareAssist.repository.PatientRepository;
 import com.hexaware.project.CareAssist.repository.PaymentRepository;
 import com.hexaware.project.CareAssist.repository.UserRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class AdminServiceImpl implements AdminService{
@@ -54,10 +58,44 @@ public class AdminServiceImpl implements AdminService{
 	        dto.setUsername(user.getUsername());
 	        dto.setEmail(user.getEmail());
 	        dto.setCreatedAt(user.getCreatedAt());
+
+	        // Extract single role name (if exists)
+	        if (user.getRoles() != null && !user.getRoles().isEmpty()) {
+	            String roleName = user.getRoles().iterator().next().getName();
+	            dto.setRole(roleName);
+	        } else {
+	            dto.setRole("N/A");
+	        }
+
 	        return dto;
 	    }).collect(Collectors.toList());
 	}
 
+
+	@Transactional
+	public String deleteAccount(int userId) {
+	    User user = userRepository.findByUserId(userId)
+	            .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + userId));
+
+	    user.getRoles().clear();
+
+	    if (user.getPatient() != null) {
+	        user.getPatient().setUser(null);
+	        user.setPatient(null);
+	    }
+
+	    if (user.getInsurancePlan() != null && !user.getInsurancePlan().isEmpty()) {
+	        user.getInsurancePlan().forEach(plan -> plan.setInsuranceCompany(null));
+	    }
+
+	    userRepository.save(user);
+	    userRepository.delete(user);
+
+	    return "User deleted successfully with ID: " + userId;
+	}
+
+
+	
 	public List<GetAllClaimHistoryDTO> getAllClaims() {
 	    List<Claim> claims = claimRepository.findAll();
 

@@ -48,7 +48,7 @@ public class User {
 	@OneToMany(mappedBy = "insuranceCompany", cascade = CascadeType.ALL)
 	private List<InsurancePlan> insurancePlan;
 	
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(
 			name = "users_roles",
 			joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "userId"),

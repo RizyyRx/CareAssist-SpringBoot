@@ -13,6 +13,8 @@ public interface AdminService {
 
 	List<GetAllUserDTO> getAllUsers();
 	
+	String deleteAccount(int userId);
+	
 	List<GetAllClaimHistoryDTO> getAllClaims();
 	
 	List<GetAllPaymentDTO> getAllPayments();

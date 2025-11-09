@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +36,14 @@ public class AdminController {
         List<GetAllUserDTO> users = adminService.getAllUsers();
         return ResponseEntity.ok(users);
     }
+    
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/admin/delete-account/{userId}")
+    public ResponseEntity<String> deleteAccount(@PathVariable int userId) {
+        adminService.deleteAccount(userId);
+        return ResponseEntity.ok("User account deleted successfully.");
+    }
+
     
     // Get all claims
     @PreAuthorize("hasAnyRole('ADMIN','INSURANCE_COMPANY')")
