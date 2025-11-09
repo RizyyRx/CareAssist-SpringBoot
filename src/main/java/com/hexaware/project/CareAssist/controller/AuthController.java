@@ -2,6 +2,8 @@ package com.hexaware.project.CareAssist.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +18,7 @@ import jakarta.validation.Valid;
 
 
 @RestController
-@RequestMapping("api/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
     private AuthService authService;
@@ -44,5 +46,10 @@ public class AuthController {
     	return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
     
+    @GetMapping("/get-username/{usernameOrEmail}")
+    public ResponseEntity<String> getUsername(@PathVariable String usernameOrEmail) {
+        String username = authService.getUsername(usernameOrEmail);
+        return ResponseEntity.ok(username);
+    }
     
 }

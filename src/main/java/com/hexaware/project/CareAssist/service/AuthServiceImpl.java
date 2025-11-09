@@ -82,4 +82,18 @@ public class AuthServiceImpl implements AuthService{
 	    return "User registered successfully with role: " + registerDTO.getRole();
 		
 	}
+	
+	public String getUsername(String usernameOrEmail) {
+	    User user = userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
+	            .orElseThrow(() -> new RuntimeException("User not found with username or email: " + usernameOrEmail));
+
+	    String username = user.getUsername();
+
+	    if (username != null && !username.isEmpty()) {
+	        username = username.substring(0, 1).toUpperCase() + username.substring(1).toLowerCase();
+	    }
+
+	    return username;
+	}
+
 }
