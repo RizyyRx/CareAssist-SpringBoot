@@ -17,15 +17,15 @@ public class Claim {
     private int claimId;
 
     @ManyToOne // Many claims for one patient
-    @JoinColumn(name = "patient_id", nullable = false)
+    @JoinColumn(name = "patient_id", nullable = true)
     private Patient patient;
 
     @OneToOne // one claim for one invoice 
-    @JoinColumn(name = "invoice_id", nullable = false)
+    @JoinColumn(name = "invoice_id", nullable = true)
     private Invoice invoice;
 
     @ManyToOne // Many claims for one insurancePlan
-    @JoinColumn(name = "insurance_plan_id", nullable = false)
+    @JoinColumn(name = "insurance_plan_id", nullable = true)
     private InsurancePlan insurancePlan;
 
     @Column(nullable = false)

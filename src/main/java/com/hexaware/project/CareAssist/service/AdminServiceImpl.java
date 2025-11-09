@@ -14,6 +14,7 @@ import com.hexaware.project.CareAssist.dto.GetAllUserDTO;
 import com.hexaware.project.CareAssist.dto.InvoiceViewDTO;
 import com.hexaware.project.CareAssist.dto.SelectedPlanDTO;
 import com.hexaware.project.CareAssist.entity.Claim;
+import com.hexaware.project.CareAssist.entity.Invoice;
 import com.hexaware.project.CareAssist.entity.Payment;
 import com.hexaware.project.CareAssist.entity.User;
 import com.hexaware.project.CareAssist.exception.ResourceNotFoundException;
@@ -78,23 +79,34 @@ public class AdminServiceImpl implements AdminService{
 	    User user = userRepository.findByUserId(userId)
 	            .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + userId));
 
+	    // Clear roles
 	    user.getRoles().clear();
 
+	    // Detach patient link if exists
 	    if (user.getPatient() != null) {
 	        user.getPatient().setUser(null);
 	        user.setPatient(null);
 	    }
 
+	    // Detach insurance company from its plans (keep plans)
 	    if (user.getInsurancePlan() != null && !user.getInsurancePlan().isEmpty()) {
 	        user.getInsurancePlan().forEach(plan -> plan.setInsuranceCompany(null));
 	    }
 
-	    userRepository.save(user);
+	    // Detach provider from invoices (keep invoices)
+	    List<Invoice> providerInvoices = invoiceRepository.findByProviderUserId(userId);
+	    providerInvoices.forEach(inv -> inv.setProvider(null));
+	    invoiceRepository.saveAll(providerInvoices);
+
+	    List<Payment> companyPayments = paymentRepository.findByInsuranceCompanyUserId(userId);
+	    companyPayments.forEach(p -> p.setInsuranceCompany(null));
+	    paymentRepository.saveAll(companyPayments);
+	    
+	    // Now safely delete user
 	    userRepository.delete(user);
 
 	    return "User deleted successfully with ID: " + userId;
 	}
-
 
 	
 	public List<GetAllClaimHistoryDTO> getAllClaims() {
@@ -124,7 +136,7 @@ public class AdminServiceImpl implements AdminService{
             .map(p -> new GetAllPaymentDTO(
                 p.getPaymentId(),
                 p.getClaim().getClaimId(),
-                p.getInsuranceCompany().getUserId(),
+                p.getInsuranceCompany() != null ? p.getInsuranceCompany().getUserId() : 0,
                 p.getPatient().getPatientId(),
                 p.getAmountPaid(),
                 p.getPaymentDate()
@@ -137,7 +149,7 @@ public class AdminServiceImpl implements AdminService{
             .stream()
             .map(p -> new GetAllPatientDTO(
                 p.getPatientId(),
-                p.getUser().getUserId(),
+                p.getUser() != null ? p.getUser().getUserId() : 0,
                 p.getFirstName(),
                 p.getLastName(),
                 p.getDob(),
@@ -178,8 +190,12 @@ public class AdminServiceImpl implements AdminService{
                     inv.getSubtotal(),                        
                     inv.getTax(),                             
                     inv.getTotalAmount(),                     
-                    inv.getPatient().getUser().getUsername(), 
-                    inv.getProvider().getUsername()   
+                    inv.getPatient() != null && inv.getPatient().getUser() != null
+	                    ? inv.getPatient().getUser().getUsername()
+	                    : "Unknown Patient",
+	                inv.getProvider() != null
+	                    ? inv.getProvider().getUsername()
+	                    : "Deleted Provider"   
             )).toList();
     }
 
@@ -197,7 +213,7 @@ public class AdminServiceImpl implements AdminService{
                 pi.getInsurancePlan().getDescription(),
                 pi.getStartDate(),
                 pi.getEndDate(),
-                pi.getStatus()   // ✅ include status
+                pi.getStatus()
             ))
             .toList();
     }
@@ -218,8 +234,10 @@ public class AdminServiceImpl implements AdminService{
                     inv.getSubtotal(),                        
                     inv.getTax(),                             
                     inv.getTotalAmount(),                     
-                    inv.getPatient().getUser().getUsername(), 
-                    inv.getProvider().getUsername()           
+                    inv.getPatient().getFirstName(),
+                    inv.getProvider() != null 
+	                    ? inv.getProvider().getUsername() 
+	                    : "Deleted Provider"           
 
             )).toList();
     }

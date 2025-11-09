@@ -14,11 +14,11 @@ public class Invoice {
     private int invoiceId;
 
     @ManyToOne // Many invoices for one patient
-    @JoinColumn(name = "patient_id", nullable = false)
+    @JoinColumn(name = "patient_id", nullable = true)
     private Patient patient;
 
     @ManyToOne  // Many invoices for one provider (User with role="PROVIDER")
-    @JoinColumn(name = "provider_id", nullable = false)
+    @JoinColumn(name = "provider_id", nullable = true)
     private User provider;
 
     @Column(nullable = false, updatable = false)

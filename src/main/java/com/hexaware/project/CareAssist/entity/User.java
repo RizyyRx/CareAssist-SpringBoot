@@ -41,11 +41,11 @@ public class User {
 	private LocalDateTime createdAt;
 	
 	// One user can be one patient only
-	@OneToOne(mappedBy = "user",cascade = CascadeType.ALL) 
+	@OneToOne(mappedBy = "user",cascade = CascadeType.PERSIST) 
 	private Patient patient;
 	
 	// One user can have many insurancePlans
-	@OneToMany(mappedBy = "insuranceCompany", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "insuranceCompany", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	private List<InsurancePlan> insurancePlan;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})

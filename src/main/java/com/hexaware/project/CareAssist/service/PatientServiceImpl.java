@@ -167,8 +167,17 @@ public class PatientServiceImpl implements PatientService{
 	            dto.setSubtotal(inv.getSubtotal());
 	            dto.setTax(inv.getTax());
 	            dto.setTotalAmount(inv.getTotalAmount());
-	            dto.setPatientName(inv.getPatient().getUser().getUsername());
-	            dto.setProviderName(inv.getProvider().getUsername());
+	            dto.setPatientName(
+	                    inv.getPatient() != null && inv.getPatient().getUser() != null
+	                        ? inv.getPatient().getUser().getUsername()
+	                        : "Unknown Patient"
+	                );
+
+	                dto.setProviderName(
+	                    inv.getProvider() != null
+	                        ? inv.getProvider().getUsername()
+	                        : "Deleted Provider"
+	                );
 	            return dto;
 	        })
 	        .collect(Collectors.toList());
@@ -275,7 +284,7 @@ public class PatientServiceImpl implements PatientService{
 	            .map(p -> new GetAllPaymentDTO(
 	                    p.getPaymentId(),
 	                    p.getClaim().getClaimId(),
-	                    p.getInsuranceCompany().getUserId(),
+	                    p.getInsuranceCompany() != null ? p.getInsuranceCompany().getUserId() : 0,
 	                    p.getPatient().getPatientId(),
 	                    p.getAmountPaid(),
 	                    p.getPaymentDate()

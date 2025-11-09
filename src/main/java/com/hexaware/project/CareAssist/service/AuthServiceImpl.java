@@ -39,18 +39,32 @@ public class AuthServiceImpl implements AuthService{
     
     @Override
     public String login(LoginDTO loginDTO) {
+    	try {
+    		// Try to find user first
+            User user = userRepository.findByUsernameOrEmail(loginDTO.getUsernameOrEmail(), loginDTO.getUsernameOrEmail())
+                    .orElseThrow(() -> new RuntimeException("Wrong credentials"));
 
-    	// calls CustomUserDetailsService for authentication
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-        		loginDTO.getUsernameOrEmail(),
-        		loginDTO.getPassword()
-        ));
+            // Enforce case-sensitive username login, email remains case-insensitive
+            boolean isEmailLogin = loginDTO.getUsernameOrEmail().equalsIgnoreCase(user.getEmail());
+            if (!isEmailLogin && !loginDTO.getUsernameOrEmail().equals(user.getUsername())) {
+                throw new RuntimeException("Wrong credentials");
+            }
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        	// calls CustomUserDetailsService for authentication
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+            		loginDTO.getUsernameOrEmail(),
+            		loginDTO.getPassword()
+            ));
 
-        String token = jwtTokenProvider.generateToken(authentication);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return token;
+            String token = jwtTokenProvider.generateToken(authentication);
+
+            return token;
+    	} catch (Exception e) {
+            // Always return a unified message for any error
+            throw new RuntimeException("Wrong credentials");
+        }
     }
 
 	@Override

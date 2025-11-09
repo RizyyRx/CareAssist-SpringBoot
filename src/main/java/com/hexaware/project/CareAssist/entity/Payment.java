@@ -18,12 +18,12 @@ public class Payment {
     @JoinColumn(name = "claim_id", nullable = false, unique = true)
     private Claim claim;
 
-    @ManyToOne(optional = false) // Many payments for one insuranceCompany
-    @JoinColumn(name = "insurance_company_id", nullable = false)
+    @ManyToOne(optional = true) // Many payments for one insuranceCompany
+    @JoinColumn(name = "insurance_company_id", nullable = true)
     private User insuranceCompany;
 
-    @ManyToOne(optional = false) // Many payments for one patient
-    @JoinColumn(name = "patient_id", nullable = false)
+    @ManyToOne(optional = true) // Many payments for one patient
+    @JoinColumn(name = "patient_id", nullable = true)
     private Patient patient;
 
     @Column(nullable = false, precision = 12, scale = 2)

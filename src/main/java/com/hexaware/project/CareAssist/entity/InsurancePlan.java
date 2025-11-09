@@ -17,7 +17,7 @@ public class InsurancePlan {
     private int planId;
 
     @ManyToOne // Many insurancePlan will be there for one user
-    @JoinColumn(name = "insurance_company_id", nullable = false)
+    @JoinColumn(name = "insurance_company_id", nullable = true)
     private User insuranceCompany;
 
     @Column(nullable = false)
@@ -40,7 +40,7 @@ public class InsurancePlan {
     private LocalDateTime createdAt;
 
     // One insurancePlan can have many patientInsurance records
-    @OneToMany(mappedBy = "insurancePlan", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "insurancePlan", cascade = CascadeType.PERSIST)
     private List<PatientInsurance> patientInsurance;
     
 	@Override

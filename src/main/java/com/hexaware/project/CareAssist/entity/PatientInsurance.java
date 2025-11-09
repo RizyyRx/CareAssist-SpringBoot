@@ -17,11 +17,11 @@ public class PatientInsurance {
     private int patientInsuranceId;
 
     @ManyToOne // Many patientInsurance can be there for one patient
-    @JoinColumn(name = "patient_id", nullable = false)
+    @JoinColumn(name = "patient_id", nullable = true)
     private Patient patient;
 
     @ManyToOne // Many patientInsurance can be there for one insurancePlan
-    @JoinColumn(name = "plan_id", nullable = false)
+    @JoinColumn(name = "plan_id", nullable = true)
     private InsurancePlan insurancePlan;
 
     @Column(nullable = false, updatable = false)

@@ -14,7 +14,7 @@ public class Patient {
     private int patientId;
 
     @OneToOne // One patient can be one user only
-    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    @JoinColumn(name = "user_id", nullable = true, unique = true)
     private User user;
     
 
@@ -35,11 +35,11 @@ public class Patient {
     private String medicalHistory;
 
     // One patient will have many patientInsurance records
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "patient", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<PatientInsurance> patientInsurance;
 
     // One patient will have many invoices
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "patient", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Invoice> invoice;
 	
 	public int getPatientId() {

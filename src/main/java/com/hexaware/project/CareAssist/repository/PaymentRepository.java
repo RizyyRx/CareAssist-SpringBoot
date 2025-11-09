@@ -13,6 +13,8 @@ public interface PaymentRepository extends JpaRepository<Payment, Integer>{
 	boolean existsByClaim(Claim claim);
 
 	List<Payment> findByPatient(Patient patient);
+
+	List<Payment> findByInsuranceCompanyUserId(int userId);
 	
 	
 }
