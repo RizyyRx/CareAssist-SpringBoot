@@ -140,7 +140,8 @@ public class PatientServiceImpl implements PatientService{
                 pi.getInsurancePlan().getPolicyTerm(),
                 pi.getInsurancePlan().getDescription(),
                 pi.getStartDate(),
-                pi.getEndDate()
+                pi.getEndDate(),
+                pi.getStatus()
         )).collect(Collectors.toList());
 
 	}
@@ -236,7 +237,8 @@ public class PatientServiceImpl implements PatientService{
 	                    c.getStatus(),
 	                    c.getSubmittedAt(),
 	                    c.getReviewedAt(),
-	                    c.getApprovedAt()
+	                    c.getApprovedAt(),
+	                    c.getPatient().getPatientId()
 	            ))
 	            .collect(Collectors.toList());
 	}

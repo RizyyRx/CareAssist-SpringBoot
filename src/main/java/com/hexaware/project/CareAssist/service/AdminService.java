@@ -8,6 +8,7 @@ import com.hexaware.project.CareAssist.dto.GetAllPatientInsuranceDTO;
 import com.hexaware.project.CareAssist.dto.GetAllPaymentDTO;
 import com.hexaware.project.CareAssist.dto.GetAllUserDTO;
 import com.hexaware.project.CareAssist.dto.InvoiceViewDTO;
+import com.hexaware.project.CareAssist.dto.SelectedPlanDTO;
 
 public interface AdminService {
 
@@ -25,7 +26,7 @@ public interface AdminService {
 
     List<InvoiceViewDTO> getAllInvoices();
 
-    List<GetAllPatientInsuranceDTO> getPatientInsurancesByPatientId(int patientId);
+    List<SelectedPlanDTO> getPatientInsurancesByPatientId(int patientId);
 
     List<InvoiceViewDTO> getInvoicesByPatientId(int patientId);
 }

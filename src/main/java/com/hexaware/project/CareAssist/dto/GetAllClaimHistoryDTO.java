@@ -7,7 +7,8 @@ import java.time.LocalDateTime;
 public class GetAllClaimHistoryDTO {
 	
 	private int claimId;
-    private BigDecimal claimAmount;
+	private int patientId;
+	private BigDecimal claimAmount;
     private BigDecimal invoiceAmount;
     private LocalDate dateOfService;
     private String diagnosis;
@@ -22,6 +23,12 @@ public class GetAllClaimHistoryDTO {
 	}
 	public void setClaimId(int claimId) {
 		this.claimId = claimId;
+	}
+    public int getPatientId() {
+		return patientId;
+	}
+	public void setPatientId(int patientId) {
+		this.patientId = patientId;
 	}
 	public BigDecimal getClaimAmount() {
 		return claimAmount;
@@ -81,19 +88,19 @@ public class GetAllClaimHistoryDTO {
 		super();
 	}
 	public GetAllClaimHistoryDTO(int claimId, BigDecimal claimAmount, BigDecimal invoiceAmount, LocalDate dateOfService,
-			String diagnosis, String treatment, String status, LocalDateTime submittedAt, LocalDateTime reviewedAt,
-			LocalDateTime approvedAt) {
-		super();
-		this.claimId = claimId;
-		this.claimAmount = claimAmount;
-		this.invoiceAmount = invoiceAmount;
-		this.dateOfService = dateOfService;
-		this.diagnosis = diagnosis;
-		this.treatment = treatment;
-		this.status = status;
-		this.submittedAt = submittedAt;
-		this.reviewedAt = reviewedAt;
-		this.approvedAt = approvedAt;
+	        String diagnosis, String treatment, String status, LocalDateTime submittedAt, 
+	        LocalDateTime reviewedAt, LocalDateTime approvedAt, int patientId) {
+	    this.claimId = claimId;
+	    this.claimAmount = claimAmount;
+	    this.invoiceAmount = invoiceAmount;
+	    this.dateOfService = dateOfService;
+	    this.diagnosis = diagnosis;
+	    this.treatment = treatment;
+	    this.status = status;
+	    this.submittedAt = submittedAt;
+	    this.reviewedAt = reviewedAt;
+	    this.approvedAt = approvedAt;
+	    this.patientId = patientId;
 	}
 
 }

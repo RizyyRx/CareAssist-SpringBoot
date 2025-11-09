@@ -12,6 +12,7 @@ import com.hexaware.project.CareAssist.dto.GetAllPatientInsuranceDTO;
 import com.hexaware.project.CareAssist.dto.GetAllPaymentDTO;
 import com.hexaware.project.CareAssist.dto.GetAllUserDTO;
 import com.hexaware.project.CareAssist.dto.InvoiceViewDTO;
+import com.hexaware.project.CareAssist.dto.SelectedPlanDTO;
 import com.hexaware.project.CareAssist.entity.Claim;
 import com.hexaware.project.CareAssist.entity.Payment;
 import com.hexaware.project.CareAssist.entity.User;
@@ -110,7 +111,8 @@ public class AdminServiceImpl implements AdminService{
 	            c.getStatus(),
 	            c.getSubmittedAt(),
 	            c.getReviewedAt(),
-	            c.getApprovedAt()
+	            c.getApprovedAt(),
+	            c.getPatient().getPatientId()
 	        ))
 	        .collect(Collectors.toList());
 	}
@@ -182,17 +184,22 @@ public class AdminServiceImpl implements AdminService{
     }
 
     
-    public List<GetAllPatientInsuranceDTO> getPatientInsurancesByPatientId(int patientId) {
+    public List<SelectedPlanDTO> getPatientInsurancesByPatientId(int patientId) {
         return patientInsuranceRepository.findByPatientPatientId(patientId)
             .stream()
-            .map(pi -> new GetAllPatientInsuranceDTO(
-                pi.getPatientInsuranceId(),
-                pi.getPatient().getPatientId(),
+            .map(pi -> new SelectedPlanDTO(
                 pi.getInsurancePlan().getPlanId(),
+                pi.getInsurancePlan().getPlanName(),
+                pi.getInsurancePlan().getCoverageAmount(),
+                pi.getInsurancePlan().getPremiumAmount(),
+                pi.getCoverageBalance(),
+                pi.getInsurancePlan().getPolicyTerm(),
+                pi.getInsurancePlan().getDescription(),
                 pi.getStartDate(),
                 pi.getEndDate(),
-                pi.getStatus()
-            )).toList();
+                pi.getStatus()   // ✅ include status
+            ))
+            .toList();
     }
 
     

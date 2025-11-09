@@ -16,6 +16,7 @@ import com.hexaware.project.CareAssist.dto.GetAllPatientInsuranceDTO;
 import com.hexaware.project.CareAssist.dto.GetAllPaymentDTO;
 import com.hexaware.project.CareAssist.dto.GetAllUserDTO;
 import com.hexaware.project.CareAssist.dto.InvoiceViewDTO;
+import com.hexaware.project.CareAssist.dto.SelectedPlanDTO;
 import com.hexaware.project.CareAssist.service.AdminService;
 
 @RestController
@@ -83,9 +84,9 @@ public class AdminController {
     }
 
     // Get patient insurance by patient Id
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','INSURANCE_COMPANY')")
     @GetMapping("/get-patient-insurance/{patientId}")
-    public ResponseEntity<List<GetAllPatientInsuranceDTO>> getPatientInsurancesByPatientId(@PathVariable int patientId) {
+    public ResponseEntity<List<SelectedPlanDTO>> getPatientInsurancesByPatientId(@PathVariable int patientId) {
         return ResponseEntity.ok(adminService.getPatientInsurancesByPatientId(patientId));
     }
 

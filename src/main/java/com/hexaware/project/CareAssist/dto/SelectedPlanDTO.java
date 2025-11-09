@@ -14,12 +14,12 @@ public class SelectedPlanDTO {
     private String description;
     private LocalDate startDate;
 	private LocalDate endDate;
+    private String status;
     
-
-    public SelectedPlanDTO() {}
+	public SelectedPlanDTO() {}
 
     public SelectedPlanDTO(int planId, String planName, BigDecimal coverageAmount, BigDecimal premiumAmount,
-			BigDecimal coverageBalance, int policyTerm, String description, LocalDate startDate, LocalDate endDate) {
+			BigDecimal coverageBalance, int policyTerm, String description, LocalDate startDate, LocalDate endDate,String status) {
 		super();
 		this.planId = planId;
 		this.planName = planName;
@@ -30,6 +30,7 @@ public class SelectedPlanDTO {
 		this.description = description;
 		this.startDate = startDate;
 		this.endDate = endDate;
+		this.status = status;
 	}
     
     public int getPlanId() {
@@ -103,4 +104,13 @@ public class SelectedPlanDTO {
 	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
+	
+    public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 }

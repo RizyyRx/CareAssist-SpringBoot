@@ -134,7 +134,8 @@ public class InsuranceCompanyServiceImpl implements InsuranceCompanyService{
 		            c.getStatus(),
 		            c.getSubmittedAt(),
 		            c.getReviewedAt(),
-		            c.getApprovedAt()
+		            c.getApprovedAt(),
+		            c.getPatient().getPatientId()
 		        ))
 		        .collect(Collectors.toList());
 		}
