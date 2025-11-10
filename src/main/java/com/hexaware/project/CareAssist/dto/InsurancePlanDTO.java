@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 public class InsurancePlanDTO {
 	
@@ -12,6 +13,7 @@ public class InsurancePlanDTO {
 	private int planId;
 
     @NotBlank(message = "Plan name is required")
+    @Size(max = 30, message = "Plan name must be within 30 characters")
     private String planName;
 
     @NotNull(message = "Coverage amount is required")
@@ -29,6 +31,7 @@ public class InsurancePlanDTO {
     @Positive(message = "Policy term must be positive")
     private Integer policyTerm;
 
+    @Size(max = 1000, message = "Description must be within 1000 characters")
     private String description; // Optional
     
 	public int getPlanId() {

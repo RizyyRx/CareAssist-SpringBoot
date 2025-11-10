@@ -30,14 +30,32 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<String> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
-        String message = "Data integrity violation: duplicate or invalid data";
-        if (ex.getRootCause() != null) {
-            String rootMsg = ex.getRootCause().getMessage();
-            if (rootMsg != null && rootMsg.contains("Duplicate entry")) {
-                message = "Duplicate entry error: " + rootMsg;
+        String message = ex.getMostSpecificCause().getMessage();
+
+        if (message != null) {
+            if (message.contains("Duplicate entry")) {
+                if (message.contains("username")) {
+                    return ResponseEntity.badRequest().body("Username already exists");
+                } else if (message.contains("email")) {
+                    return ResponseEntity.badRequest().body("Email already exists");
+                } else {
+                    return ResponseEntity.badRequest().body("Duplicate entry — data already exists");
+                }
+            } else if (message.contains("Data too long for column")) {
+                if (message.contains("username")) {
+                    return ResponseEntity.badRequest().body("Username is too long — maximum 20 characters allowed");
+                } else if (message.contains("email")) {
+                    return ResponseEntity.badRequest().body("Email is too long — please shorten it");
+                } else {
+                    return ResponseEntity.badRequest().body("Input data too long for one of the fields");
+                }
+            } else if (message.contains("Out of range value for column")) {
+                return ResponseEntity.badRequest().body("One of the numeric fields has a value that is too large");
             }
         }
-        return new ResponseEntity<>(message, HttpStatus.CONFLICT);
+
+        // Default fallback
+        return ResponseEntity.badRequest().body("Invalid or duplicate data");
     }
     
     @ExceptionHandler(RuntimeException.class)

@@ -202,6 +202,9 @@ public class PatientServiceImpl implements PatientService{
         if(patientInsurance.getCoverageBalance().compareTo(invoice.getTotalAmount()) < 0) {
         	 throw new RuntimeException("Not enough balance for this claim.");
         }
+        
+        claimRepository.findByInvoice(invoice)
+        .ifPresent(c -> { throw new RuntimeException("You have already used this invoice for a claim."); });
 
         Claim claim = new Claim();
         claim.setPatient(patient);
