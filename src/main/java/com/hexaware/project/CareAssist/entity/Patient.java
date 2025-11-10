@@ -33,6 +33,9 @@ public class Patient {
 
     @Column(columnDefinition = "TEXT")
     private String medicalHistory;
+    
+    @Column(name = "profile_pic")
+    private String profilePic;
 
     // One patient will have many patientInsurance records
     @OneToMany(mappedBy = "patient", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -130,6 +133,14 @@ public class Patient {
 		this.invoice = invoice;
 	}
 
+	public String getProfilePic() {
+	    return profilePic;
+	}
+
+	public void setProfilePic(String profilePic) {
+	    this.profilePic = profilePic;
+	}
+	
 	public Patient() {
 		super();
 	}

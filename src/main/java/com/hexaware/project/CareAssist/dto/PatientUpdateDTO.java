@@ -24,8 +24,15 @@ public class PatientUpdateDTO {
     private String contactNumber;
     private String address;
     private String medicalHistory;
+    private String profilePic;
 
-    public String getFirstName() {
+    public String getProfilePic() {
+		return profilePic;
+	}
+	public void setProfilePic(String profilePic) {
+		this.profilePic = profilePic;
+	}
+	public String getFirstName() {
 		return firstName;
 	}
 	public void setFirstName(String firstName) {

@@ -2,12 +2,15 @@ package com.hexaware.project.CareAssist.service;
 
 
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.hexaware.project.CareAssist.dto.ClaimSubmissionDTO;
 import com.hexaware.project.CareAssist.dto.GetAllClaimHistoryDTO;
@@ -88,9 +91,38 @@ public class PatientServiceImpl implements PatientService{
 	    dto.setContactNumber(patient.getContactNumber());
 	    dto.setAddress(patient.getAddress());
 	    dto.setMedicalHistory(patient.getMedicalHistory());
+	    dto.setProfilePic(patient.getProfilePic());
 
 	    return dto;
 	}
+	
+	public String uploadProfilePic(User user, MultipartFile file) {
+        Patient patient = patientRepository.findByUserUserId(user.getUserId())
+                .orElseThrow(() -> new RuntimeException("Profile not found for user: " + user.getUsername()));
+
+        try {
+            String basePath = System.getProperty("user.dir") + File.separator + "uploads" + File.separator + "profile-pics";
+            File dir = new File(basePath);
+            if (!dir.exists() && !dir.mkdirs()) {
+                throw new IOException("Failed to create upload directory: " + basePath);
+            }
+
+            String originalName = file.getOriginalFilename();
+            String safeName = (originalName != null) ? originalName.replaceAll("[^a-zA-Z0-9._-]", "_") : "unknown.png";
+            String filename = user.getUsername() + "_" + safeName;
+
+            File destination = new File(dir, filename);
+            file.transferTo(destination);
+
+            String relativePath = "/uploads/profile-pics/" + filename;
+            patient.setProfilePic(relativePath);
+            patientRepository.save(patient);
+
+            return relativePath;
+        } catch (IOException e) {
+            throw new RuntimeException("Error uploading profile picture: " + e.getMessage(), e);
+        }
+    }
 
 
 	public String selectInsurancePlan(User user, PatientInsuranceDTO patientInsuranceDTO) {

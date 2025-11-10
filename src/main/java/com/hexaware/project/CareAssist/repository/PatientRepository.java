@@ -10,4 +10,6 @@ import com.hexaware.project.CareAssist.entity.User;
 public interface PatientRepository extends JpaRepository<Patient, Integer>{
 
 	Optional<Patient> findByUser(User user);
+	
+	Optional<Patient> findByUserUserId(int userId);
 }

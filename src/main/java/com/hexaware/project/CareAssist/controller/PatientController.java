@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.hexaware.project.CareAssist.dto.ClaimSubmissionDTO;
 import com.hexaware.project.CareAssist.dto.GetAllClaimHistoryDTO;
@@ -66,6 +68,17 @@ public class PatientController {
 
 	    String response = patientService.updatePatientProfile(user, dto);
 	    return ResponseEntity.ok(response);
+	}
+	
+	@PreAuthorize("hasRole('PATIENT')")
+	@PostMapping("/upload-pic")
+	public ResponseEntity<String> uploadProfilePic(@RequestParam("file") MultipartFile file, Authentication authentication) {
+	    String username = authentication.getName();
+	    User user = userRepository.findByUsername(username)
+	            .orElseThrow(() -> new RuntimeException("User not found"));
+
+	    String path = patientService.uploadProfilePic(user, file);
+	    return ResponseEntity.ok(path);
 	}
 	
 	// Select an Insurance plan
