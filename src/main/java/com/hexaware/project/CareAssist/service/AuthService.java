@@ -11,4 +11,6 @@ public interface AuthService {
 	String register(RegisterDTO registerDTO);
 	
 	String getUsername(String usernameOrEmail);
+	
+	void sendEmail(String to, String subject, String text);
 }

@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.hexaware.project.CareAssist.entity.PasswordResetToken;
 import com.hexaware.project.CareAssist.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Long>{
@@ -15,4 +16,6 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	Optional<User> findByUserId(int userId);
 	
 	void deleteByUserId(int userId);
+
+	Optional<User> findByEmail(String email);
 }
