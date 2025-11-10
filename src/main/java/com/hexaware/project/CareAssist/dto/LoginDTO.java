@@ -25,5 +25,13 @@ public class LoginDTO {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	public LoginDTO(
+			@NotBlank(message = "Username or email is required") @Size(min = 3, max = 30, message = "Username or Email must be between 3 and 30 characters") String usernameOrEmail,
+			@NotBlank(message = "password is required") @Size(min = 3, max = 20, message = "Password must be between 3 and 20 characters") String password) {
+		super();
+		this.usernameOrEmail = usernameOrEmail;
+		this.password = password;
+	}
 
 }
