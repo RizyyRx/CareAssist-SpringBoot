@@ -44,6 +44,10 @@ public class User {
 	@OneToOne(mappedBy = "user",cascade = CascadeType.PERSIST) 
 	private Patient patient;
 	
+	@OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST)
+	private InsuranceCompany insuranceCompany;
+
+	
 	// One user can have many insurancePlans
 	@OneToMany(mappedBy = "insuranceCompany", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	private List<InsurancePlan> insurancePlan;

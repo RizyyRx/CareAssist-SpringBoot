@@ -8,15 +8,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 
 import com.hexaware.project.CareAssist.dto.GetAllClaimHistoryDTO;
+import com.hexaware.project.CareAssist.dto.InsuranceCompanyProfileDTO;
 import com.hexaware.project.CareAssist.dto.InsurancePlanDTO;
 import com.hexaware.project.CareAssist.dto.PaymentRequestDTO;
+import com.hexaware.project.CareAssist.entity.InsuranceCompany;
 import com.hexaware.project.CareAssist.entity.User;
 import com.hexaware.project.CareAssist.repository.UserRepository;
 import com.hexaware.project.CareAssist.service.InsuranceCompanyService;
@@ -90,5 +95,50 @@ public class InsuranceCompanyController {
         List<GetAllClaimHistoryDTO> claimHistory = insuranceCompanyService.getClaimsByPatientId(patientId);
         return ResponseEntity.ok(claimHistory);
     }
+    
+    @PreAuthorize("hasRole('INSURANCE_COMPANY')")
+    @GetMapping("/profile")
+    public ResponseEntity<InsuranceCompanyProfileDTO> getProfile(Authentication authentication) {
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        InsuranceCompanyProfileDTO profile = insuranceCompanyService.getProfile(user);
+
+        if (profile == null) {
+            throw new RuntimeException("Profile not found for user: " + username);
+        }
+
+        return ResponseEntity.ok(profile);
+    }
+
+    // ✅ Update profile
+    @PreAuthorize("hasRole('INSURANCE_COMPANY')")
+    @PutMapping("/update")
+    public ResponseEntity<String> updateProfile(@RequestBody InsuranceCompanyProfileDTO dto, Authentication authentication) {
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        String message = insuranceCompanyService.updateProfile(user, dto);
+        return ResponseEntity.ok(message);
+    }
+
+    @PreAuthorize("hasRole('INSURANCE_COMPANY')")
+    @PostMapping("/upload-pic")
+    public ResponseEntity<String> uploadProfilePic(@RequestParam("file") MultipartFile file, Authentication authentication) {
+        if (file == null || file.isEmpty()) {
+            return ResponseEntity.badRequest().body("Please select a valid file to upload");
+        }
+
+        String username = authentication.getName();
+        System.out.println("🔐 Authenticated username = " + authentication.getName());
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        String path = insuranceCompanyService.uploadProfilePic(user, file);
+        return ResponseEntity.ok(path);
+    }
+
 
 }

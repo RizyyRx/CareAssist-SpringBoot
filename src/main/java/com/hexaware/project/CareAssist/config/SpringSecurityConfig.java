@@ -48,6 +48,7 @@ public class SpringSecurityConfig {
         http.csrf(csrf -> csrf.disable()).cors(cors->{})
                 .authorizeHttpRequests((authorize) -> {
                     authorize.requestMatchers("/api/auth/**").permitAll();
+                    authorize.requestMatchers("/uploads/**").permitAll();
                     authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
                     authorize.requestMatchers("/api/insurance-company/get-all").authenticated();
                     authorize.anyRequest().authenticated();
