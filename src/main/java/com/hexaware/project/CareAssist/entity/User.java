@@ -43,9 +43,12 @@ public class User {
 	// One user can be one patient only
 	@OneToOne(mappedBy = "user",cascade = CascadeType.PERSIST) 
 	private Patient patient;
-	
+
 	@OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST)
 	private InsuranceCompany insuranceCompany;
+
+	@OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST)
+	private HealthcareProvider healthcareProvider;
 
 	
 	// One user can have many insurancePlans
@@ -123,23 +126,42 @@ public class User {
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
+	
+	public InsuranceCompany getInsuranceCompany() {
+		return insuranceCompany;
+	}
+
+	public void setInsuranceCompany(InsuranceCompany insuranceCompany) {
+		this.insuranceCompany = insuranceCompany;
+	}
+
+	public HealthcareProvider getHealthcareProvider() {
+		return healthcareProvider;
+	}
+
+	public void setHealthcareProvider(HealthcareProvider healthcareProvider) {
+		this.healthcareProvider = healthcareProvider;
+	}
 
 	public User() {
 		super();
 	}
 
-	public User(int userId, String username, String email, String password, LocalDateTime createdAt, Patient patient,
-			List<InsurancePlan> insurancePlan, Set<Role> roles) {
-		super();
-		this.userId = userId;
-		this.username = username;
-		this.email = email;
-		this.password = password;
-		this.createdAt = createdAt;
-		this.patient = patient;
-		this.insurancePlan = insurancePlan;
-		this.roles = roles;
-	}
+	public User(int userId, String username, String email, String password, LocalDateTime createdAt, 
+            Patient patient, InsuranceCompany insuranceCompany, 
+            HealthcareProvider healthcareProvider, List<InsurancePlan> insurancePlan, Set<Role> roles) {
+   this.userId = userId;
+   this.username = username;
+   this.email = email;
+   this.password = password;
+   this.createdAt = createdAt;
+   this.patient = patient;
+   this.insuranceCompany = insuranceCompany;
+   this.healthcareProvider = healthcareProvider;
+   this.insurancePlan = insurancePlan;
+   this.roles = roles;
+}
+
 
 	@Override
 	public String toString() {

@@ -14,11 +14,15 @@ import com.hexaware.project.CareAssist.dto.GetAllUserDTO;
 import com.hexaware.project.CareAssist.dto.InvoiceViewDTO;
 import com.hexaware.project.CareAssist.dto.SelectedPlanDTO;
 import com.hexaware.project.CareAssist.entity.Claim;
+import com.hexaware.project.CareAssist.entity.HealthcareProvider;
+import com.hexaware.project.CareAssist.entity.InsuranceCompany;
 import com.hexaware.project.CareAssist.entity.Invoice;
 import com.hexaware.project.CareAssist.entity.Payment;
 import com.hexaware.project.CareAssist.entity.User;
 import com.hexaware.project.CareAssist.exception.ResourceNotFoundException;
 import com.hexaware.project.CareAssist.repository.ClaimRepository;
+import com.hexaware.project.CareAssist.repository.HealthcareProviderRepository;
+import com.hexaware.project.CareAssist.repository.InsuranceCompanyRepository;
 import com.hexaware.project.CareAssist.repository.InvoiceRepository;
 import com.hexaware.project.CareAssist.repository.PatientInsuranceRepository;
 import com.hexaware.project.CareAssist.repository.PatientRepository;
@@ -33,7 +37,7 @@ public class AdminServiceImpl implements AdminService{
 
 	public AdminServiceImpl(UserRepository userRepository, ClaimRepository claimRepository,
 			PaymentRepository paymentRepository, PatientRepository patientRepository,
-			PatientInsuranceRepository patientInsuranceRepository, InvoiceRepository invoiceRepository) {
+			PatientInsuranceRepository patientInsuranceRepository, InvoiceRepository invoiceRepository, HealthcareProviderRepository healthcareProviderRepository, InsuranceCompanyRepository insuranceCompanyRepository) {
 		super();
 		this.userRepository = userRepository;
 		this.claimRepository = claimRepository;
@@ -41,6 +45,8 @@ public class AdminServiceImpl implements AdminService{
 		this.patientRepository = patientRepository;
 		this.patientInsuranceRepository = patientInsuranceRepository;
 		this.invoiceRepository = invoiceRepository;
+		this.healthcareProviderRepository = healthcareProviderRepository;
+		this.insuranceCompanyRepository = insuranceCompanyRepository;
 	}
 
 
@@ -50,6 +56,8 @@ public class AdminServiceImpl implements AdminService{
 	private PatientRepository patientRepository;
 	private PatientInsuranceRepository patientInsuranceRepository;
 	private InvoiceRepository invoiceRepository;
+	private HealthcareProviderRepository healthcareProviderRepository;
+	private InsuranceCompanyRepository insuranceCompanyRepository;
 
 	public List<GetAllUserDTO> getAllUsers() {
 	    List<User> users = userRepository.findAll();
@@ -91,6 +99,20 @@ public class AdminServiceImpl implements AdminService{
 	    // Detach insurance company from its plans (keep plans)
 	    if (user.getInsurancePlan() != null && !user.getInsurancePlan().isEmpty()) {
 	        user.getInsurancePlan().forEach(plan -> plan.setInsuranceCompany(null));
+	    }
+	    
+	    // Detach healthcare provider
+	    if (user.getHealthcareProvider() != null) {
+	        HealthcareProvider provider = user.getHealthcareProvider();
+	        provider.setUser(null);
+	        healthcareProviderRepository.save(provider);
+	    }
+
+	    // Detach insurance company
+	    if (user.getInsuranceCompany() != null) {
+	        InsuranceCompany company = user.getInsuranceCompany();
+	        company.setUser(null);
+	        insuranceCompanyRepository.save(company);
 	    }
 
 	    // Detach provider from invoices (keep invoices)

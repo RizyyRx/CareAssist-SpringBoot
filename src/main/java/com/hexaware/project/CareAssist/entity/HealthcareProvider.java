@@ -5,15 +5,18 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "insurance_company")
-public class InsuranceCompany {
+@Table(name = "healthcare_provider")
+public class HealthcareProvider {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long companyId;
+    private Long providerId;
 
-    @NotBlank(message = "Company name cannot be blank")
-    private String companyName;
+    @NotBlank(message = "Provider name cannot be blank")
+    private String providerName;
+
+    @NotBlank(message = "Specialization cannot be blank")
+    private String specialization;
 
     @NotBlank(message = "Address cannot be blank")
     private String address;
@@ -30,20 +33,28 @@ public class InsuranceCompany {
     @JoinColumn(name = "user_id", referencedColumnName = "userId", nullable = true)
     private User user;
 
-    public Long getCompanyId() {
-        return companyId;
+    public Long getProviderId() {
+        return providerId;
     }
 
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
+    public void setProviderId(Long providerId) {
+        this.providerId = providerId;
     }
 
-    public String getCompanyName() {
-        return companyName;
+    public String getProviderName() {
+        return providerName;
     }
 
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+    public void setProviderName(String providerName) {
+        this.providerName = providerName;
+    }
+
+    public String getSpecialization() {
+        return specialization;
+    }
+
+    public void setSpecialization(String specialization) {
+        this.specialization = specialization;
     }
 
     public String getAddress() {

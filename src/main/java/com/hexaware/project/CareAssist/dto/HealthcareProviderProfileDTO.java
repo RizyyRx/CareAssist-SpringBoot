@@ -4,11 +4,15 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public class InsuranceCompanyProfileDTO {
+public class HealthcareProviderProfileDTO {
 
-    @NotBlank(message = "Company name cannot be blank")
-    @Size(max = 100, message = "Company name cannot exceed 100 characters")
-    private String companyName;
+    @NotBlank(message = "Provider name cannot be blank")
+    @Size(max = 100, message = "Provider name cannot exceed 100 characters")
+    private String providerName;
+
+    @NotBlank(message = "Specialization cannot be blank")
+    @Size(max = 80, message = "Specialization cannot exceed 80 characters")
+    private String specialization;
 
     @NotBlank(message = "Address cannot be blank")
     @Size(max = 200, message = "Address cannot exceed 200 characters")
@@ -23,17 +27,26 @@ public class InsuranceCompanyProfileDTO {
 
     private String profilePic;
 
-    // Getters and setters
-    public String getCompanyName() {
-        return companyName;
+    public String getProviderName() {
+        return providerName;
     }
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+
+    public void setProviderName(String providerName) {
+        this.providerName = providerName;
+    }
+
+    public String getSpecialization() {
+        return specialization;
+    }
+
+    public void setSpecialization(String specialization) {
+        this.specialization = specialization;
     }
 
     public String getAddress() {
         return address;
     }
+
     public void setAddress(String address) {
         this.address = address;
     }
@@ -41,6 +54,7 @@ public class InsuranceCompanyProfileDTO {
     public String getContactNumber() {
         return contactNumber;
     }
+
     public void setContactNumber(String contactNumber) {
         this.contactNumber = contactNumber;
     }
@@ -48,6 +62,7 @@ public class InsuranceCompanyProfileDTO {
     public String getDescription() {
         return description;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
@@ -55,6 +70,7 @@ public class InsuranceCompanyProfileDTO {
     public String getProfilePic() {
         return profilePic;
     }
+
     public void setProfilePic(String profilePic) {
         this.profilePic = profilePic;
     }

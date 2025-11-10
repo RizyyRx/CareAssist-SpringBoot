@@ -104,11 +104,6 @@ public class InsuranceCompanyController {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         InsuranceCompanyProfileDTO profile = insuranceCompanyService.getProfile(user);
-
-        if (profile == null) {
-            throw new RuntimeException("Profile not found for user: " + username);
-        }
-
         return ResponseEntity.ok(profile);
     }
 
