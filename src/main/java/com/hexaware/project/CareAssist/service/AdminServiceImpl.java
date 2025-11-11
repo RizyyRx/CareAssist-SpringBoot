@@ -115,7 +115,7 @@ public class AdminServiceImpl implements AdminService{
 	        insuranceCompanyRepository.save(company);
 	    }
 
-	    // Detach provider from invoices (keep invoices)
+	    // Detach provider from invoices
 	    List<Invoice> providerInvoices = invoiceRepository.findByProviderUserId(userId);
 	    providerInvoices.forEach(inv -> inv.setProvider(null));
 	    invoiceRepository.saveAll(providerInvoices);
@@ -124,7 +124,6 @@ public class AdminServiceImpl implements AdminService{
 	    companyPayments.forEach(p -> p.setInsuranceCompany(null));
 	    paymentRepository.saveAll(companyPayments);
 	    
-	    // Now safely delete user
 	    userRepository.delete(user);
 
 	    return "User deleted successfully with ID: " + userId;

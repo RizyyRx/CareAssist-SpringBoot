@@ -25,7 +25,7 @@ public class PasswordResetService {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private AuthService emailService; // we’ll create this next
+    private AuthService emailService;
 
     public void generateResetToken(String email) {
         User user = userRepository.findByEmail(email)

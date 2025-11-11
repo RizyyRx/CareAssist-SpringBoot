@@ -127,7 +127,6 @@ public class PatientServiceImpl implements PatientService{
 
 	public String selectInsurancePlan(User user, PatientInsuranceDTO patientInsuranceDTO) {
 		
-		//user has linked patient entity
 		Patient patient = user.getPatient();
 		if (patient == null) {
 	        throw new RuntimeException("No patient found for user, Kindly update your patient profile");

@@ -47,11 +47,9 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public String login(LoginDTO loginDTO) {
     	try {
-    		// Try to find user first
             User user = userRepository.findByUsernameOrEmail(loginDTO.getUsernameOrEmail(), loginDTO.getUsernameOrEmail())
                     .orElseThrow(() -> new RuntimeException("Wrong credentials"));
 
-            // Enforce case-sensitive username login, email remains case-insensitive
             boolean isEmailLogin = loginDTO.getUsernameOrEmail().equalsIgnoreCase(user.getEmail());
             if (!isEmailLogin && !loginDTO.getUsernameOrEmail().equals(user.getUsername())) {
                 throw new RuntimeException("Wrong credentials");
@@ -69,7 +67,6 @@ public class AuthServiceImpl implements AuthService{
 
             return token;
     	} catch (Exception e) {
-            // Always return a unified message for any error
             throw new RuntimeException("Wrong credentials");
         }
     }

@@ -107,7 +107,6 @@ public class InsuranceCompanyController {
         return ResponseEntity.ok(profile);
     }
 
-    // ✅ Update profile
     @PreAuthorize("hasRole('INSURANCE_COMPANY')")
     @PutMapping("/update")
     public ResponseEntity<String> updateProfile(@RequestBody InsuranceCompanyProfileDTO dto, Authentication authentication) {

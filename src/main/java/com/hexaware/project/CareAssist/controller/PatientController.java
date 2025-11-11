@@ -97,6 +97,8 @@ public class PatientController {
 	@PreAuthorize("hasRole('PATIENT')")
 	@GetMapping("/selected-plans")
 	public ResponseEntity<List<SelectedPlanDTO>> getSelectedPlans(Authentication authentication) {
+		System.out.println("🧩 Authenticated user: " + authentication.getName());
+		System.out.println("🧩 Granted Authorities: " + authentication.getAuthorities());
 	    String username = authentication.getName();
 	    User user = userRepository.findByUsername(username)
 	                 .orElseThrow(() -> new RuntimeException("User not found"));
