@@ -126,7 +126,6 @@ public class InsuranceCompanyController {
         }
 
         String username = authentication.getName();
-        System.out.println("🔐 Authenticated username = " + authentication.getName());
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
