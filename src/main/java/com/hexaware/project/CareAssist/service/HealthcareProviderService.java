@@ -10,6 +10,8 @@ public interface HealthcareProviderService {
 
 	String createInvoice(User provider, InvoiceDTO dto);
 	
+	String createInvoiceFromPdf(User provider,Integer patientId,MultipartFile file);
+	
 	HealthcareProviderProfileDTO getProfile(User user);
 	
 	String updateProfile(User user, HealthcareProviderProfileDTO dto);

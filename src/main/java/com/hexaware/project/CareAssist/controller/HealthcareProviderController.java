@@ -1,6 +1,7 @@
 package com.hexaware.project.CareAssist.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -43,6 +44,19 @@ public class HealthcareProviderController {
                 .orElseThrow(() -> new RuntimeException("Provider user not found"));
 
         String message = healthcareProviderService.createInvoice(provider, dto);
+        return new ResponseEntity<>(message, HttpStatus.CREATED);
+    }
+    
+    // Create an invoice from PDF
+    @PreAuthorize("hasRole('HEALTHCARE_PROVIDER')")
+    @PostMapping(value = "/create-invoice-from-pdf",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> createInvoiceFromPdf(@RequestParam("file") MultipartFile file, @RequestParam("patientId") Integer patientId,Authentication authentication) {
+        String providerUsername = authentication.getName();
+
+        User provider = userRepository.findByUsername(providerUsername)
+                .orElseThrow(() -> new RuntimeException("Provider user not found"));
+
+        String message = healthcareProviderService.createInvoiceFromPdf(provider, patientId, file);
         return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
     

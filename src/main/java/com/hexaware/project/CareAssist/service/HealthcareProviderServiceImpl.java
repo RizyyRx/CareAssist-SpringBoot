@@ -2,8 +2,13 @@ package com.hexaware.project.CareAssist.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -50,6 +55,61 @@ public class HealthcareProviderServiceImpl implements HealthcareProviderService{
 	
 	    return "Invoice created successfully";
 	}
+	
+
+    //method used by the PDF endpoint
+    public String createInvoiceFromPdf(User provider,Integer patientId,MultipartFile file) {
+        if (file.isEmpty()) {
+            throw new RuntimeException("Uploaded PDF is empty");
+        }
+
+        try {
+            String text = extractTextFromPdf(file);
+            
+            InvoiceDTO dto = buildDtoFromPdfText(text, patientId);
+
+            return createInvoice(provider, dto);
+
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to read PDF: " + e.getMessage(), e);
+        }
+    }
+
+    private String extractTextFromPdf(MultipartFile file) throws IOException {
+        try (PDDocument document = PDDocument.load(file.getInputStream())) {
+            PDFTextStripper stripper = new PDFTextStripper();
+            return stripper.getText(document);
+        }
+    }
+
+    private InvoiceDTO buildDtoFromPdfText(String text, Integer patientId) {
+        InvoiceDTO dto = new InvoiceDTO();
+        dto.setPatientId(patientId);
+
+        dto.setConsultationFee(
+                parseBigDecimal(text, "Consultation Fee:\\s*(\\d+(?:\\.\\d+)?)")
+        );
+        dto.setDiagnosticTestsFee(
+                parseBigDecimal(text, "Diagnostic Tests Fee:\\s*(\\d+(?:\\.\\d+)?)")
+        );
+        dto.setDiagnosticScanFee(
+                parseBigDecimal(text, "Diagnostic Scan Fee:\\s*(\\d+(?:\\.\\d+)?)")
+        );
+        dto.setMedicationFee(
+                parseBigDecimal(text, "Prescribed Medications Bill Amount:\\s*(\\d+(?:\\.\\d+)?)")
+        );
+
+        return dto;
+    }
+
+    private BigDecimal parseBigDecimal(String text, String regex) {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(text);
+        if (matcher.find()) {
+            return new BigDecimal(matcher.group(1));
+        }
+        return BigDecimal.ZERO;
+    }
 	
     @Override
     public HealthcareProviderProfileDTO getProfile(User user) {
