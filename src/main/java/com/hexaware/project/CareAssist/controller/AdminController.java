@@ -6,7 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,8 +19,12 @@ import com.hexaware.project.CareAssist.dto.GetAllPatientInsuranceDTO;
 import com.hexaware.project.CareAssist.dto.GetAllPaymentDTO;
 import com.hexaware.project.CareAssist.dto.GetAllUserDTO;
 import com.hexaware.project.CareAssist.dto.InvoiceViewDTO;
+import com.hexaware.project.CareAssist.dto.RegisterDTO;
 import com.hexaware.project.CareAssist.dto.SelectedPlanDTO;
+import com.hexaware.project.CareAssist.dto.UpdateAccountDTO;
 import com.hexaware.project.CareAssist.service.AdminService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api")
@@ -44,8 +51,14 @@ public class AdminController {
         adminService.deleteAccount(userId);
         return ResponseEntity.ok("User account deleted successfully.");
     }
-
     
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/admin/update-account/{userId}")
+    public ResponseEntity<String> updateAccount(@PathVariable int userId, @RequestBody UpdateAccountDTO updateAccountDTO){
+    	String messageString = adminService.updateAccount(userId, updateAccountDTO);
+    	return ResponseEntity.ok(messageString);
+    }
+
     // Get all claims
     @PreAuthorize("hasAnyRole('ADMIN','INSURANCE_COMPANY')")
     @GetMapping("/get-claims")

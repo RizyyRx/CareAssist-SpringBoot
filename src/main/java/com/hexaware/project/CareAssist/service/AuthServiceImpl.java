@@ -1,5 +1,6 @@
 package com.hexaware.project.CareAssist.service;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,7 +102,8 @@ public class AuthServiceImpl implements AuthService{
                 .orElseThrow(() -> new RuntimeException("Role not found"));
 
 	    // Put role obj into a Set and set it to user obj
-	    user.setRoles(Set.of(role));
+	    Set<Role> roles = new HashSet<>(); roles.add(role);
+	    user.setRoles(roles);
 	
 	    userRepository.save(user);
 	    

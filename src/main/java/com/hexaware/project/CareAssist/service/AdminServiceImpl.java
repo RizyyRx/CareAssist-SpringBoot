@@ -1,9 +1,12 @@
 package com.hexaware.project.CareAssist.service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.hexaware.project.CareAssist.dto.GetAllClaimHistoryDTO;
@@ -12,12 +15,15 @@ import com.hexaware.project.CareAssist.dto.GetAllPatientInsuranceDTO;
 import com.hexaware.project.CareAssist.dto.GetAllPaymentDTO;
 import com.hexaware.project.CareAssist.dto.GetAllUserDTO;
 import com.hexaware.project.CareAssist.dto.InvoiceViewDTO;
+import com.hexaware.project.CareAssist.dto.RegisterDTO;
 import com.hexaware.project.CareAssist.dto.SelectedPlanDTO;
+import com.hexaware.project.CareAssist.dto.UpdateAccountDTO;
 import com.hexaware.project.CareAssist.entity.Claim;
 import com.hexaware.project.CareAssist.entity.HealthcareProvider;
 import com.hexaware.project.CareAssist.entity.InsuranceCompany;
 import com.hexaware.project.CareAssist.entity.Invoice;
 import com.hexaware.project.CareAssist.entity.Payment;
+import com.hexaware.project.CareAssist.entity.Role;
 import com.hexaware.project.CareAssist.entity.User;
 import com.hexaware.project.CareAssist.exception.ResourceNotFoundException;
 import com.hexaware.project.CareAssist.repository.ClaimRepository;
@@ -27,6 +33,7 @@ import com.hexaware.project.CareAssist.repository.InvoiceRepository;
 import com.hexaware.project.CareAssist.repository.PatientInsuranceRepository;
 import com.hexaware.project.CareAssist.repository.PatientRepository;
 import com.hexaware.project.CareAssist.repository.PaymentRepository;
+import com.hexaware.project.CareAssist.repository.RoleRepository;
 import com.hexaware.project.CareAssist.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -37,7 +44,9 @@ public class AdminServiceImpl implements AdminService{
 
 	public AdminServiceImpl(UserRepository userRepository, ClaimRepository claimRepository,
 			PaymentRepository paymentRepository, PatientRepository patientRepository,
-			PatientInsuranceRepository patientInsuranceRepository, InvoiceRepository invoiceRepository, HealthcareProviderRepository healthcareProviderRepository, InsuranceCompanyRepository insuranceCompanyRepository) {
+			PatientInsuranceRepository patientInsuranceRepository, InvoiceRepository invoiceRepository,
+			HealthcareProviderRepository healthcareProviderRepository, InsuranceCompanyRepository insuranceCompanyRepository,
+			RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
 		super();
 		this.userRepository = userRepository;
 		this.claimRepository = claimRepository;
@@ -47,6 +56,8 @@ public class AdminServiceImpl implements AdminService{
 		this.invoiceRepository = invoiceRepository;
 		this.healthcareProviderRepository = healthcareProviderRepository;
 		this.insuranceCompanyRepository = insuranceCompanyRepository;
+		this.roleRepository = roleRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 
@@ -58,6 +69,8 @@ public class AdminServiceImpl implements AdminService{
 	private InvoiceRepository invoiceRepository;
 	private HealthcareProviderRepository healthcareProviderRepository;
 	private InsuranceCompanyRepository insuranceCompanyRepository;
+	private RoleRepository roleRepository;
+	private final PasswordEncoder passwordEncoder;
 
 	public List<GetAllUserDTO> getAllUsers() {
 	    List<User> users = userRepository.findAll();
@@ -128,8 +141,33 @@ public class AdminServiceImpl implements AdminService{
 
 	    return "User deleted successfully with ID: " + userId;
 	}
-
 	
+	public String updateAccount(int userId, UpdateAccountDTO updateAccountDTO) {
+		try {
+			User user = userRepository.findByUserId(userId)
+			        .orElseThrow(() -> new ResourceNotFoundException("User not found with user Id: " + userId));
+
+			    if (updateAccountDTO.getUsername() != null && !updateAccountDTO.getUsername().isBlank()) user.setUsername(updateAccountDTO.getUsername());
+			    if (updateAccountDTO.getEmail() != null && !updateAccountDTO.getEmail().isBlank()) user.setEmail(updateAccountDTO.getEmail());
+			    if (updateAccountDTO.getPassword() != null && !updateAccountDTO.getPassword().isBlank()) user.setPassword(passwordEncoder.encode(updateAccountDTO.getPassword()));
+
+			    if (updateAccountDTO.getRole() != null && !updateAccountDTO.getRole().isBlank()) {
+			        String requestedRole = updateAccountDTO.getRole().toUpperCase();
+			        Role role = roleRepository.findByName("ROLE_" + requestedRole)
+			            .orElseThrow(() -> new ResourceNotFoundException("Role not found: " + requestedRole));
+			        Set<Role> roles = new HashSet<>(); roles.add(role);
+		            user.setRoles(roles);
+			    }
+
+			    userRepository.save(user);
+			    return "User with ID: " + userId + " updated successfully";
+		} catch (Exception e) {
+	        e.printStackTrace();
+	        throw e;
+	    }
+	    
+	}
+
 	public List<GetAllClaimHistoryDTO> getAllClaims() {
 	    List<Claim> claims = claimRepository.findAll();
 
